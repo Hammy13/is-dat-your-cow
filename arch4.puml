@@ -1,0 +1,114 @@
+@startuml
+!theme aws-orange
+title Cow Identification System - //<b><color:#000000>is-dat-your-cow</color></b>//
+
+left to right direction
+
+skinparam backgroundColor #F8F9FA
+skinparam shadowing true
+skinparam roundcorner 6
+skinparam defaultFontName Segoe UI
+skinparam linetype ortho
+skinparam nodesep 80
+skinparam ranksep 45
+skinparam ArrowThickness 1.5
+skinparam padding 5
+
+skinparam package {
+    BackgroundColor<<input>> #1976D2
+    BackgroundColor<<process>> #388E3C
+    BackgroundColor<<model>> #F57C00
+    BackgroundColor<<storage>> #7B1FA2
+    BackgroundColor<<output>> #0097A7
+    BorderColor #37474F
+    BorderThickness 2
+    FontColor<<input>> #FFFFFF
+    FontColor<<process>> #FFFFFF
+    FontColor<<model>> #FFFFFF
+    FontColor<<storage>> #FFFFFF
+    FontColor<<output>> #FFFFFF
+    FontSize 9
+    FontStyle bold
+    stereotypePosition none
+    Padding 8
+}
+
+skinparam rectangle {
+    BackgroundColor #FFFFFF
+    BorderColor #37474F
+    BorderThickness 1.5
+    FontColor #212121
+    FontSize 8
+    stereotypePosition none
+    Padding 3
+}
+
+skinparam arrow {
+    Color #37474F
+    FontSize 7
+    FontColor #546E7A
+}
+
+rectangle " " #transparent;line:000000;line.bold {
+
+' ===== COLUMN 1 =====
+package "**L1: Input**" <<input>> {
+    rectangle "Video | Images" as L1A #BBDEFB
+    rectangle "Preprocess" as L1B #BBDEFB
+}
+
+' ===== COLUMN 2 =====
+package "**L2: Dataset**" <<process>> {
+    rectangle "Extract | Quality | Annotate" as L2ABC #C8E6C9
+}
+
+package "**L3: YOLO**" <<model>> {
+    rectangle "Model | BBoxes" as L3AB #FFE0B2
+}
+
+' ===== COLUMN 3 =====
+package "**L4: Track**" <<process>> {
+    rectangle "MOT | Tracklets" as L4AB #C8E6C9
+}
+
+package "**L5: Features**" <<model>> {
+    rectangle "Encoder | Vectors" as L5AB #FFE0B2
+}
+
+' ===== COLUMN 4 =====
+package "**L6: Match**" <<storage>> {
+    rectangle "Gallery | Similarity" as L6AB #E1BEE7
+}
+
+package "**L7: Output**" <<output>> {
+    rectangle "Dashboard | Logs" as L7AB #B2EBF2
+}
+
+' ===== MAIN HORIZONTAL FLOW =====
+"**L1: Input**" -right-> "**L2: Dataset**"
+"**L2: Dataset**" -right-> "**L3: YOLO**"
+"**L3: YOLO**" -right-> "**L4: Track**"
+"**L4: Track**" -right-> "**L5: Features**"
+"**L5: Features**" -right-> "**L6: Match**"
+"**L6: Match**" -right-> "**L7: Output**"
+
+' ===== VERTICAL FLOW =====
+"**L2: Dataset**" -down-> "**L3: YOLO**"
+"**L4: Track**" -down-> "**L5: Features**"
+"**L6: Match**" -down-> "**L7: Output**"
+
+' ===== TRAINING (GREEN DASHED) =====
+L2ABC -[#4CAF50,dashed]down-> L3AB : <color:#4CAF50><b>Train
+L2ABC -[#4CAF50,dashed]right-> L5AB : <color:#4CAF50><b>Train
+
+' ===== FEEDBACK (ORANGE DASHED) =====
+L7AB -[#FF6F00,dashed]left-> L2ABC : <color:#FF6F00><b>Feedback
+
+}
+
+legend bottom
+    |= <back:#1976D2><color:#FFFFFF> Input </color></back> |= <back:#388E3C><color:#FFFFFF> Process </color></back> |= <back:#F57C00><color:#FFFFFF> Model </color></back> |= <back:#7B1FA2><color:#FFFFFF> Storage </color></back> |= <back:#0097A7><color:#FFFFFF> Output </color></back> |
+    | <color:#37474F>━▶</color> Flow | <color:#4CAF50>╌▶</color> Train | <color:#FF6F00>╌▶</color> Feedback |
+endlegend
+
+@enduml

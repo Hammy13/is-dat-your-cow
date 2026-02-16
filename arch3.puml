@@ -1,0 +1,129 @@
+@startuml
+title YOLO-enabled Hybrid ML System: Unique Cow Identification (Layered Architecture)
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 14
+skinparam defaultFontName Arial
+skinparam packageStyle rectangle
+skinparam ArrowThickness 2
+
+' ========= Color palette (safe hex) =========
+!define LAYER_FILL  #DFF5E6
+!define SUB_FILL    #CFE8FF
+!define MODEL_FILL  #FFF2B2
+!define DB_FILL     #D6F5D6
+!define OUT_FILL    #E8E8E8
+
+' ========= Arrow colors =========
+' Blue = Inference/Monitoring flow
+' Green = Training flow
+' Orange = Feedback loop
+!define INF_COL #0B3D91
+!define TRN_COL #2E7D32
+!define FB_COL  #F57C00
+
+' ============================================================
+' LAYER 1: Data Ingestion
+' ============================================================
+package "Layer 1 — Data Ingestion" as L1 LAYER_FILL {
+  [Video Stream Input\n(CCTV / walkway / parlour)] as VSI SUB_FILL
+  [Frame Preprocessing\n(resize, normalize,\nlighting correction)] as PRE SUB_FILL
+  [Data Augmentation\n(training only)] as AUG SUB_FILL
+}
+
+' ============================================================
+' LAYER 2: Dataset Preparation & Governance
+' ============================================================
+package "Layer 2 — Dataset Preparation & Governance" as L2 LAYER_FILL {
+  [Frame Extraction\n(1–3 FPS)] as FE SUB_FILL
+  [Quality Gates\n(blur/duplicate/occlusion)] as QG SUB_FILL
+  [Annotation\n(bbox + Cow_ID)] as ANN SUB_FILL
+  [Split Strategy\n(identity-safe split)] as SPLIT SUB_FILL
+  [Dataset Versioning\n(tags/MLflow/DVC)] as VER SUB_FILL
+}
+
+' ============================================================
+' LAYER 3: Cow Detection (YOLO)
+' ============================================================
+package "Layer 3 — Cow Detection (YOLO)" as L3 LAYER_FILL {
+  [YOLO Detector] as YOLO MODEL_FILL
+  [Bounding Boxes + Crops] as CROP MODEL_FILL
+}
+
+' ============================================================
+' LAYER 4: Tracking & Tracklets
+' ============================================================
+package "Layer 4 — Tracking & Tracklets" as L4 LAYER_FILL {
+  [Multi-Object Tracking\n(ByteTrack / DeepSORT)] as TRK MODEL_FILL
+  [Tracklet Builder\n(short sequences per cow)] as TLET MODEL_FILL
+}
+
+' ============================================================
+' LAYER 5: Re-ID Feature Extraction (Identity Signatures)
+' ============================================================
+package "Layer 5 — Re-ID Feature Extraction" as L5 LAYER_FILL {
+  [Appearance Encoder (CNN)\n(coat pattern/texture)] as APP MODEL_FILL
+  [Optional Behaviour Encoder\n(short-term motion cues)] as BEH MODEL_FILL
+  [Fusion Layer\n(concat + norm / attention)] as FUSE MODEL_FILL
+}
+
+' ============================================================
+' LAYER 6: Identity Matching + Gallery
+' ============================================================
+package "Layer 6 — Identity Matching & Gallery" as L6 LAYER_FILL {
+  database "Cow Identity Gallery\n(Embedding Store: Cow_ID → vectors)" as GAL DB_FILL
+  [Identity Matcher\n(cosine distance + threshold)] as MATCH MODEL_FILL
+  [Cow ID Assignment\n(persistent Cow_ID)] as IDASG OUT_FILL
+}
+
+' ============================================================
+' LAYER 7: Outputs + Monitoring
+' ============================================================
+package "Layer 7 — Outputs & Monitoring" as L7 LAYER_FILL {
+  [Monitoring Dashboard\n(ID timelines + snapshots)] as DASH OUT_FILL
+  [Export/Logs\n(Cow_ID events)] as LOG OUT_FILL
+}
+
+' ============================================================
+' INFERENCE FLOW (Blue)
+' ============================================================
+VSI -[#0B3D91]-> PRE : stream frames
+PRE -[#0B3D91]-> YOLO : preprocessed frames
+YOLO -[#0B3D91]-> CROP : bboxes + crops
+YOLO -[#0B3D91]-> TRK : detections
+TRK -[#0B3D91]-> TLET : tracklets
+CROP -[#0B3D91]-> APP : cow crops
+TLET -[#0B3D91]-> BEH : motion cues (optional)
+APP -[#0B3D91]-> FUSE
+BEH -[#0B3D91]-> FUSE
+FUSE -[#0B3D91]-> MATCH
+GAL -[#0B3D91]-> MATCH : retrieve candidates
+MATCH -[#0B3D91]-> IDASG : matched Cow_ID
+IDASG -[#0B3D91]-> DASH
+IDASG -[#0B3D91]-> LOG
+
+' ============================================================
+' TRAINING FLOW (Green)
+' ============================================================
+VSI -[#2E7D32]-> FE : collect videos
+FE -[#2E7D32]-> QG : filter frames
+QG -[#2E7D32]-> ANN : label bboxes + Cow_ID
+ANN -[#2E7D32]-> SPLIT
+SPLIT -[#2E7D32]-> VER
+
+AUG -[#2E7D32]-> YOLO : augmented frames (train)
+AUG -[#2E7D32]-> APP : augmented crops (train)
+SPLIT -[#2E7D32]-> YOLO : fine-tune detector
+SPLIT -[#2E7D32]-> APP : train embeddings
+SPLIT -[#2E7D32]-> MATCH : calibrate threshold
+SPLIT -[#2E7D32]-> GAL : build/refresh gallery
+
+' ============================================================
+' FEEDBACK LOOP (Orange)
+' ============================================================
+MATCH -[#F57C00,dashed]-> ANN : hard cases / ID switches
+DASH  -[#F57C00,dashed]-> QG  : low-quality scenes to filter
+VER   -[#F57C00,dashed]-> AUG : update augmentation policy
+
+@enduml

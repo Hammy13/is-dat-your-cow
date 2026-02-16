@@ -1,0 +1,108 @@
+@startuml
+title Cow Identification System - //<b><color:#000000>is-dat-your-cow</color></b>//
+
+left to right direction
+
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 40
+skinparam ArrowThickness 2
+skinparam padding 10
+
+skinparam package {
+    BackgroundColor<<input>> #64B5F6
+    BackgroundColor<<process>> #81C784
+    BackgroundColor<<model>> #FFB74D
+    BackgroundColor<<output>> #BA68C8
+    BorderColor #000000
+    BorderThickness 2.5
+    FontColor #000000
+    FontSize 11
+    FontStyle bold
+    Padding 15
+}
+
+skinparam rectangle {
+    BackgroundColor #FFFFFF
+    BorderColor #424242
+    BorderThickness 2
+    FontColor #000000
+    FontSize 10
+    Padding 8
+}
+
+skinparam arrow {
+    Color #000000
+    FontSize 9
+    FontColor #000000
+}
+
+' ===== COLUMN 1 =====
+together {
+    package "Input Layer" <<input>> {
+        rectangle "Video/Images\nPreprocessing" as L1
+    }
+    
+    package "Processing Layer" <<process>> {
+        rectangle "Frame Extraction\nQuality Control" as L2
+    }
+}
+
+' ===== COLUMN 2 =====
+together {
+    package "Detection Layer" <<model>> {
+        rectangle "YOLO Detection\nBounding Boxes" as L3
+    }
+    
+    package "Tracking Layer" <<process>> {
+        rectangle "Multi-Object\nTracking" as L4
+    }
+    
+    package "Feature Layer" <<model>> {
+        rectangle "Feature Extraction\nAppearance Encoder" as L5
+    }
+}
+
+' ===== COLUMN 3 =====
+together {
+    package "Matching Layer" <<output>> {
+        rectangle "Identity Matching\nGallery Database" as L6
+    }
+    
+    package "Output Layer" <<output>> {
+        rectangle "Dashboard\nLogs & Reports" as L7
+    }
+}
+
+' ===== MAIN FLOW =====
+
+L2 -right-> L3
+L5 -right-> L6
+
+' ===== VERTICAL =====
+L1 -down-> L2
+L3 -down-> L4
+L4 -down-> L5
+L6 -down-> L7
+
+' ===== TRAINING =====
+L2 -[#4CAF50,dashed,thickness=2]right-> L3 : <color:#4CAF50><b>Train
+L2 -[#4CAF50,dashed,thickness=2]right-> L5 : <color:#4CAF50><b>Train
+
+' ===== FEEDBACK =====
+L7 -[#FF6F00,dashed,thickness=2]left-> L2 : <color:#FF6F00><b>Feedback
+
+/' note bottom
+    <b>Color Legend:</b>
+    <back:#64B5F6>   </back> Input
+    <back:#81C784>   </back> Processing
+    <back:#FFB74D>   </back> ML Models
+    <back:#BA68C8>   </back> Output
+end note
+'/
+
+@enduml
