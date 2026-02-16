@@ -1,0 +1,70 @@
+@startuml
+!theme vibrant
+title Unique Cow Identification - //<b><color:#000000>is-dat-your-cow</color></b>//
+
+left to right direction
+
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam roundcorner 14
+skinparam defaultFontName Arial
+skinparam packageStyle rectangle
+skinparam ArrowThickness 2
+skinparam nodesep 70
+skinparam ranksep 50
+skinparam padding 15
+
+' Colors
+!define LAYER #DFF5E6
+!define BOX   #CFE8FF
+!define MODEL #FFF2B2
+!define DB    #D6F5D6
+!define OUT   #E8E8E8
+
+' Arrow colors
+!define INF #0B3D91
+!define TRN #2E7D32
+
+' ========== TOP ROW ==========
+' Layer 1 - Input (Top Left)
+package "Layer 1 — Input" as L1 LAYER {
+    [Video Stream/Images] as V BOX
+    [Preprocessing] as P BOX
+}
+
+' Layer 2 - Detection (Top Right)
+package "Layer 2 — Detection" as L2 LAYER {
+    [YOLO11 Cow Detector] as Y MODEL
+    [Cow Crops (bboxes)] as C MODEL
+}
+
+' ========== BOTTOM ROW ==========
+' Layer 3 - Identification (Bottom Left)
+package "Layer 3 — Identification (Re-ID)" as L4 LAYER {
+    [CNN Embeddings\n(coat pattern)] as E MODEL
+    database "Cow Gallery\n(Cow_ID → vectors)" as G DB
+    [ID Matching\n(cosine + threshold)] as M MODEL
+    [Cow_ID Output] as ID OUT
+}
+
+' Layer 4 - Output (Bottom Right)
+package "Layer 4 — Output" as L5 LAYER {
+    [Monitoring Dashboard\n(ID timeline)] as D OUT
+}
+
+' ========== Inference flow (blue) ==========
+V -[#0B3D91]down-> P : frames
+P -[#0B3D91]right-> Y : preprocessed\nframes
+Y -[#0B3D91]down-> C : bboxes +\ncrops
+C -[#0B3D91]down-> E : cow crops
+E -[#0B3D91]down-> M : embeddings
+G -[#0B3D91]right-> M : candidates
+M -[#0B3D91]down-> ID : assigned\nCow_ID
+ID -[#0B3D91]right-> D
+
+' ========== Training (green, minimal) ==========
+P -[#2E7D32,dashed]right-> Y : fine-tune\n(train)
+C -[#2E7D32,dashed]down-> E : train\nembeddings
+M -[#2E7D32,dashed]left-> G : build/update\ngallery
+
+@enduml
