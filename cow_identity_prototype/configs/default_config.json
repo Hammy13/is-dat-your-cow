@@ -1,0 +1,45 @@
+{
+  "detector": {
+    "model_path": "yolo11n.pt",
+    "confidence": 0.25,
+    "iou": 0.45,
+    "image_size": 960,
+    "tracker": "bytetrack.yaml"
+  },
+  "mesh": {
+    "grid_size": 16,
+    "histogram_bins": 8,
+    "dark_threshold": 75,
+    "light_threshold": 180
+  },
+  "embedding": {
+    "backbone": "resnet50",
+    "input_size": 224,
+    "use_pretrained": true,
+    "device": "cpu"
+  },
+  "matching": {
+    "yolo_mesh_threshold": 0.8,
+    "cnn_threshold": 0.84,
+    "hybrid_threshold": 0.83,
+    "hybrid_rescue_margin": 0.06,
+    "ensemble_threshold": 0.76,
+    "training_priority_margin": 0.03,
+    "hybrid_mesh_weight": 0.45,
+    "hybrid_deep_weight": 0.55,
+    "allow_new_identity": true,
+    "min_track_hits": 3
+  },
+  "inference": {
+    "sample_every_n_frames": 2,
+    "side_view_min_aspect_ratio": 1.0,
+    "min_crop_area_ratio": 0.01,
+    "min_sharpness": 20.0,
+    "save_debug_panels": true
+  },
+  "training": {
+    "auto_cluster_eps": 0.24,
+    "auto_cluster_min_samples": 1,
+    "save_crop_images": true
+  }
+}

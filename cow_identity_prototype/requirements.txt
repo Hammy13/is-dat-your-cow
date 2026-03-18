@@ -1,0 +1,10 @@
+ultralytics>=8.4
+torch>=2.0
+torchvision>=0.15
+opencv-python>=4.9
+numpy>=1.26
+pandas>=2.0
+matplotlib>=3.8
+plotly>=5.0
+streamlit>=1.30
+scikit-learn>=1.4

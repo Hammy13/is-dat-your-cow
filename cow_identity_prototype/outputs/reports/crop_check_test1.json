@@ -1,0 +1,74 @@
+[
+  {
+    "source_name": "test1.jpg",
+    "source_type": "image",
+    "frame_index": null,
+    "track_id": null,
+    "x1": 183,
+    "y1": 886,
+    "x2": 1461,
+    "y2": 1991,
+    "yolo11_cow_id": "cow_017",
+    "yolo11_score": 0.7613881826400757,
+    "cnn_cow_id": "cow_006",
+    "cnn_score": 0.9037876129150391,
+    "hybrid_cow_id": "cow_006",
+    "hybrid_score": 0.8479050397872925,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\test1_1_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\test1_1_comparison.png",
+    "saved_gallery_image_path": "",
+    "conclusion": "Match to cow_006. Hybrid score 0.848 exceeded threshold 0.830; supporting scores were YOLO11=0.761 and CNN=0.904.",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_006",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_006\\images\\20260314_152731.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_006\\images\\20260314_152732.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_006\\images\\20260314_152738.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_006\\images\\20260314_152812.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_006\\images\\20260314_152813.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.8479050397872925
+      },
+      {
+        "cow_id": "cow_005",
+        "score": 0.742821991443634
+      },
+      {
+        "cow_id": "cow_001",
+        "score": 0.738450288772583
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.7613881826400757
+      },
+      {
+        "cow_id": "cow_005",
+        "score": 0.7470593452453613
+      },
+      {
+        "cow_id": "cow_003",
+        "score": 0.7223487496376038
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.9037876129150391
+      },
+      {
+        "cow_id": "cow_001",
+        "score": 0.7507577538490295
+      },
+      {
+        "cow_id": "cow_005",
+        "score": 0.741503119468689
+      }
+    ]
+  }
+]

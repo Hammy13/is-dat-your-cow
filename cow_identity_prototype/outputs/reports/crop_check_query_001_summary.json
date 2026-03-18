@@ -1,0 +1,9 @@
+{
+  "records": 2,
+  "unique_hybrid_ids": 2,
+  "unique_yolo11_ids": 2,
+  "unique_cnn_ids": 2,
+  "mean_hybrid_score": 0.76353919506073,
+  "mean_yolo11_score": 0.787794440984726,
+  "mean_cnn_score": 0.7674165666103363
+}

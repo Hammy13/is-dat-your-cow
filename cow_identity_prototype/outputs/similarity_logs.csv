@@ -1,0 +1,2 @@
+source_name,source_type,hybrid_cow_id,hybrid_score,yolo11_score,cnn_score
+11.png,image,cow_013,0.685782,0.733827,0.692340

@@ -1,0 +1,9 @@
+[
+  {
+    "video": "172915-848187944_small.mp4",
+    "predicted_unique_cows_hybrid": 1,
+    "predicted_unique_cows_yolo11": 2,
+    "predicted_unique_cows_cnn": 1,
+    "tracked_objects": 5
+  }
+]

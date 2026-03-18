@@ -1,0 +1,32 @@
+{
+  "upload_dir": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\data\\train_uploads",
+  "images_processed": 49,
+  "clusters_created": 24,
+  "gallery_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\artifacts\\identity_gallery.json",
+  "cow_ids": [
+    "cow_001",
+    "cow_002",
+    "cow_003",
+    "cow_004",
+    "cow_005",
+    "cow_006",
+    "cow_007",
+    "cow_008",
+    "cow_009",
+    "cow_010",
+    "cow_011",
+    "cow_012",
+    "cow_013",
+    "cow_014",
+    "cow_015",
+    "cow_016",
+    "cow_017",
+    "cow_018",
+    "cow_019",
+    "cow_020",
+    "cow_021",
+    "cow_022",
+    "cow_023",
+    "cow_024"
+  ]
+}
