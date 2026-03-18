@@ -1,0 +1,2439 @@
+[
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 0,
+    "track_id": 1,
+    "x1": 16,
+    "y1": 358,
+    "x2": 625,
+    "y2": 961,
+    "yolo11_cow_id": "cow_027",
+    "yolo11_score": 0.6587783694267273,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.4960055351257324,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.5500896573066711,
+    "hybrid_is_new_identity": true,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_0_1_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_0_1_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_018",
+        "score": 0.5500896573066711
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.5073076486587524
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.4990748465061188
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6587783694267273
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.6562296748161316
+      },
+      {
+        "cow_id": "cow_017",
+        "score": 0.6346378326416016
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_019",
+        "score": 0.4960055351257324
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49563169479370117
+      },
+      {
+        "cow_id": "cow_020",
+        "score": 0.49517515301704407
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 0,
+    "track_id": 3,
+    "x1": 1111,
+    "y1": 366,
+    "x2": 1729,
+    "y2": 847,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_0_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_0_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 40,
+    "track_id": 1,
+    "x1": 12,
+    "y1": 353,
+    "x2": 619,
+    "y2": 954,
+    "yolo11_cow_id": "cow_027",
+    "yolo11_score": 0.6587783694267273,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.4960055351257324,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.5500896573066711,
+    "hybrid_is_new_identity": true,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_40_1_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_40_1_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_018",
+        "score": 0.5500896573066711
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.5073076486587524
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.4990748465061188
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6587783694267273
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.6562296748161316
+      },
+      {
+        "cow_id": "cow_017",
+        "score": 0.6346378326416016
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_019",
+        "score": 0.4960055351257324
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49563169479370117
+      },
+      {
+        "cow_id": "cow_020",
+        "score": 0.49517515301704407
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 40,
+    "track_id": 3,
+    "x1": 1097,
+    "y1": 362,
+    "x2": 1713,
+    "y2": 842,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_40_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_40_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 80,
+    "track_id": 1,
+    "x1": 129,
+    "y1": 356,
+    "x2": 564,
+    "y2": 784,
+    "yolo11_cow_id": "cow_027",
+    "yolo11_score": 0.6587783694267273,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.4960055351257324,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.5500896573066711,
+    "hybrid_is_new_identity": true,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_80_1_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_80_1_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_018",
+        "score": 0.5500896573066711
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.5073076486587524
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.4990748465061188
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6587783694267273
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.6562296748161316
+      },
+      {
+        "cow_id": "cow_017",
+        "score": 0.6346378326416016
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_019",
+        "score": 0.4960055351257324
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49563169479370117
+      },
+      {
+        "cow_id": "cow_020",
+        "score": 0.49517515301704407
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 80,
+    "track_id": 3,
+    "x1": 1088,
+    "y1": 357,
+    "x2": 1712,
+    "y2": 845,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_80_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_80_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 120,
+    "track_id": 1,
+    "x1": 149,
+    "y1": 356,
+    "x2": 527,
+    "y2": 727,
+    "yolo11_cow_id": "cow_027",
+    "yolo11_score": 0.6587783694267273,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.4960055351257324,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.5500896573066711,
+    "hybrid_is_new_identity": true,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_120_1_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_120_1_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_018",
+        "score": 0.5500896573066711
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.5073076486587524
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.4990748465061188
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6587783694267273
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.6562296748161316
+      },
+      {
+        "cow_id": "cow_017",
+        "score": 0.6346378326416016
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_019",
+        "score": 0.4960055351257324
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49563169479370117
+      },
+      {
+        "cow_id": "cow_020",
+        "score": 0.49517515301704407
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 120,
+    "track_id": 3,
+    "x1": 1100,
+    "y1": 356,
+    "x2": 1706,
+    "y2": 830,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_120_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_120_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 160,
+    "track_id": 3,
+    "x1": 1120,
+    "y1": 356,
+    "x2": 1703,
+    "y2": 810,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_160_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_160_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 200,
+    "track_id": 3,
+    "x1": 1111,
+    "y1": 355,
+    "x2": 1719,
+    "y2": 829,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_200_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_200_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 240,
+    "track_id": 3,
+    "x1": 1109,
+    "y1": 356,
+    "x2": 1730,
+    "y2": 839,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_240_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_240_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 240,
+    "track_id": 7,
+    "x1": 570,
+    "y1": 322,
+    "x2": 864,
+    "y2": 536,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6032118201255798,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.9991995096206665,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.7855328917503357,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "ensemble_consensus",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_240_7_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_240_7_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.7855328917503357
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.50709468126297
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.48135092854499817
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_005",
+        "score": 0.6032118201255798
+      },
+      {
+        "cow_id": "cow_004",
+        "score": 0.5458055138587952
+      },
+      {
+        "cow_id": "cow_002",
+        "score": 0.5396513342857361
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.9991995096206665
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.4941977560520172
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49379488825798035
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 280,
+    "track_id": 3,
+    "x1": 1120,
+    "y1": 355,
+    "x2": 1701,
+    "y2": 805,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_280_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_280_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 280,
+    "track_id": 7,
+    "x1": 553,
+    "y1": 318,
+    "x2": 831,
+    "y2": 519,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6032118201255798,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.9991995096206665,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.7855328917503357,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "ensemble_consensus",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_280_7_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_280_7_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.7855328917503357
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.50709468126297
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.48135092854499817
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_005",
+        "score": 0.6032118201255798
+      },
+      {
+        "cow_id": "cow_004",
+        "score": 0.5458055138587952
+      },
+      {
+        "cow_id": "cow_002",
+        "score": 0.5396513342857361
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.9991995096206665
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.4941977560520172
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49379488825798035
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 320,
+    "track_id": 3,
+    "x1": 1122,
+    "y1": 354,
+    "x2": 1716,
+    "y2": 812,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_320_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_320_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 320,
+    "track_id": 4,
+    "x1": 613,
+    "y1": 368,
+    "x2": 1158,
+    "y2": 912,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.7169656753540039,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999695360660553,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8821374177932739,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_320_4_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_320_4_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8821374177932739
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5703774094581604
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.5364715456962585
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_018",
+        "score": 0.7169656753540039
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.6984556913375854
+      },
+      {
+        "cow_id": "cow_005",
+        "score": 0.695286214351654
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999695360660553
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49421656131744385
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4938485324382782
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 360,
+    "track_id": 3,
+    "x1": 1108,
+    "y1": 352,
+    "x2": 1736,
+    "y2": 836,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_360_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_360_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 360,
+    "track_id": 4,
+    "x1": 533,
+    "y1": 331,
+    "x2": 1113,
+    "y2": 900,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.7169656753540039,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999695360660553,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8821374177932739,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_360_4_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_360_4_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8821374177932739
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5703774094581604
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.5364715456962585
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_018",
+        "score": 0.7169656753540039
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.6984556913375854
+      },
+      {
+        "cow_id": "cow_005",
+        "score": 0.695286214351654
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999695360660553
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49421656131744385
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4938485324382782
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 400,
+    "track_id": 3,
+    "x1": 1049,
+    "y1": 340,
+    "x2": 1683,
+    "y2": 840,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_400_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_400_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 400,
+    "track_id": 4,
+    "x1": 509,
+    "y1": 322,
+    "x2": 1087,
+    "y2": 879,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.7169656753540039,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999695360660553,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8821374177932739,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_400_4_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_400_4_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8821374177932739
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5703774094581604
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.5364715456962585
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_018",
+        "score": 0.7169656753540039
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.6984556913375854
+      },
+      {
+        "cow_id": "cow_005",
+        "score": 0.695286214351654
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999695360660553
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49421656131744385
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4938485324382782
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 440,
+    "track_id": 3,
+    "x1": 1031,
+    "y1": 348,
+    "x2": 1635,
+    "y2": 836,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_440_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_440_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 440,
+    "track_id": 6,
+    "x1": 77,
+    "y1": 354,
+    "x2": 677,
+    "y2": 953,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6842468976974487,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.9995987415313721,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8849002122879028,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_440_6_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_440_6_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8849002122879028
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5441085696220398
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.513436496257782
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.6842468976974487
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.6451754570007324
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.6394014358520508
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.9995987415313721
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.4959408640861511
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4955655634403229
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 440,
+    "track_id": 4,
+    "x1": 474,
+    "y1": 318,
+    "x2": 1062,
+    "y2": 881,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.7169656753540039,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999695360660553,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8821374177932739,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_440_4_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_440_4_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8821374177932739
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5703774094581604
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.5364715456962585
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_018",
+        "score": 0.7169656753540039
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.6984556913375854
+      },
+      {
+        "cow_id": "cow_005",
+        "score": 0.695286214351654
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999695360660553
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49421656131744385
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4938485324382782
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 480,
+    "track_id": 3,
+    "x1": 1026,
+    "y1": 350,
+    "x2": 1616,
+    "y2": 839,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_480_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_480_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 480,
+    "track_id": 6,
+    "x1": 85,
+    "y1": 355,
+    "x2": 680,
+    "y2": 943,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6842468976974487,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.9995987415313721,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8849002122879028,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_480_6_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_480_6_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8849002122879028
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5441085696220398
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.513436496257782
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.6842468976974487
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.6451754570007324
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.6394014358520508
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.9995987415313721
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.4959408640861511
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4955655634403229
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 480,
+    "track_id": 4,
+    "x1": 476,
+    "y1": 316,
+    "x2": 1027,
+    "y2": 839,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.7169656753540039,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999695360660553,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8821374177932739,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_480_4_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_480_4_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8821374177932739
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5703774094581604
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.5364715456962585
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_018",
+        "score": 0.7169656753540039
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.6984556913375854
+      },
+      {
+        "cow_id": "cow_005",
+        "score": 0.695286214351654
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999695360660553
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49421656131744385
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4938485324382782
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 520,
+    "track_id": 3,
+    "x1": 1038,
+    "y1": 353,
+    "x2": 1612,
+    "y2": 837,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_520_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_520_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 520,
+    "track_id": 6,
+    "x1": 83,
+    "y1": 355,
+    "x2": 675,
+    "y2": 935,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6842468976974487,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.9995987415313721,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8849002122879028,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_520_6_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_520_6_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8849002122879028
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5441085696220398
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.513436496257782
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.6842468976974487
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.6451754570007324
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.6394014358520508
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.9995987415313721
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.4959408640861511
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4955655634403229
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 520,
+    "track_id": 4,
+    "x1": 471,
+    "y1": 316,
+    "x2": 1019,
+    "y2": 832,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.7169656753540039,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999695360660553,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8821374177932739,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_520_4_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_520_4_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8821374177932739
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5703774094581604
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.5364715456962585
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_018",
+        "score": 0.7169656753540039
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.6984556913375854
+      },
+      {
+        "cow_id": "cow_005",
+        "score": 0.695286214351654
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999695360660553
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49421656131744385
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4938485324382782
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 560,
+    "track_id": 3,
+    "x1": 1060,
+    "y1": 353,
+    "x2": 1631,
+    "y2": 838,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_560_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_560_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 560,
+    "track_id": 6,
+    "x1": 83,
+    "y1": 354,
+    "x2": 698,
+    "y2": 951,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6842468976974487,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.9995987415313721,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8849002122879028,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_560_6_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_560_6_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8849002122879028
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5441085696220398
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.513436496257782
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.6842468976974487
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.6451754570007324
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.6394014358520508
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.9995987415313721
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.4959408640861511
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4955655634403229
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 560,
+    "track_id": 4,
+    "x1": 486,
+    "y1": 315,
+    "x2": 1014,
+    "y2": 806,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.7169656753540039,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999695360660553,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8821374177932739,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_560_4_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_560_4_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8821374177932739
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5703774094581604
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.5364715456962585
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_018",
+        "score": 0.7169656753540039
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.6984556913375854
+      },
+      {
+        "cow_id": "cow_005",
+        "score": 0.695286214351654
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999695360660553
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49421656131744385
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4938485324382782
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 600,
+    "track_id": 3,
+    "x1": 1095,
+    "y1": 347,
+    "x2": 1673,
+    "y2": 839,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6627269387245178,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999163031578064,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8417310118675232,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_600_3_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_600_3_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8417310118675232
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5466806292533875
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5044693350791931
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.6627269387245178
+      },
+      {
+        "cow_id": "cow_012",
+        "score": 0.6531468629837036
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6518846154212952
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999163031578064
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49424415826797485
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.49386417865753174
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 600,
+    "track_id": 6,
+    "x1": 83,
+    "y1": 345,
+    "x2": 707,
+    "y2": 945,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.6842468976974487,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.9995987415313721,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8849002122879028,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_600_6_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_600_6_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8849002122879028
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5441085696220398
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.513436496257782
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.6842468976974487
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.6451754570007324
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.6394014358520508
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.9995987415313721
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.4959408640861511
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4955655634403229
+      }
+    ]
+  },
+  {
+    "source_name": "172915-848187944_small.mp4",
+    "source_type": "video",
+    "frame_index": 600,
+    "track_id": 4,
+    "x1": 471,
+    "y1": 308,
+    "x2": 1023,
+    "y2": 820,
+    "yolo11_cow_id": "cow_028",
+    "yolo11_score": 0.7169656753540039,
+    "cnn_cow_id": "cow_027",
+    "cnn_score": 0.999695360660553,
+    "hybrid_cow_id": "cow_027",
+    "hybrid_score": 0.8821374177932739,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_600_4_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\172915-848187944_small_600_4_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_1.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_0_3.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_240_7.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_320_4.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_027\\images\\172915-848187944_small_440_6.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.8821374177932739
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5703774094581604
+      },
+      {
+        "cow_id": "cow_022",
+        "score": 0.5364715456962585
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_018",
+        "score": 0.7169656753540039
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.6984556913375854
+      },
+      {
+        "cow_id": "cow_005",
+        "score": 0.695286214351654
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_027",
+        "score": 0.999695360660553
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.49421656131744385
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4938485324382782
+      }
+    ]
+  }
+]

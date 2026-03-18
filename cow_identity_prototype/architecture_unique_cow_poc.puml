@@ -1,0 +1,56 @@
+@startuml
+title Unique_Cow_Identification_Architecture - Hybrid Prototype
+
+package "Shared Input Layer" {
+  [Gallery Dataset\n(Labeled Images)]
+  [Query Images / Videos]
+  [Frame Preprocessing]
+}
+
+package "Detection & Tracking" {
+  [Ultralytics YOLO\n(Cow Detection)]
+  [Bounding Box Crops]
+  [ByteTrack / YOLO Track]
+}
+
+package "Feature Extraction" {
+  [Mesh Grid Descriptor\nNxN pattern matrix]
+  [Deep Embedding Encoder\nResNet50 or ViT]
+  [Hybrid Feature Fusion]
+}
+
+package "Identity Layer" {
+  database "Global Cow Gallery" as Gallery
+  [Similarity Matcher\nCosine / Euclidean]
+  [Cow_ID Assignment]
+}
+
+package "Outputs & Analytics" {
+  [Annotated Images / Videos]
+  [Fingerprint Panels]
+  [CSV / JSON Reports]
+  [Charts & Dashboard]
+}
+
+[Gallery Dataset\n(Labeled Images)] --> [Frame Preprocessing]
+[Query Images / Videos] --> [Frame Preprocessing]
+[Frame Preprocessing] --> [Ultralytics YOLO\n(Cow Detection)]
+[Ultralytics YOLO\n(Cow Detection)] --> [Bounding Box Crops]
+[Ultralytics YOLO\n(Cow Detection)] --> [ByteTrack / YOLO Track]
+[Bounding Box Crops] --> [Mesh Grid Descriptor\nNxN pattern matrix]
+[Bounding Box Crops] --> [Deep Embedding Encoder\nResNet50 or ViT]
+[Mesh Grid Descriptor\nNxN pattern matrix] --> [Hybrid Feature Fusion]
+[Deep Embedding Encoder\nResNet50 or ViT] --> [Hybrid Feature Fusion]
+[Mesh Grid Descriptor\nNxN pattern matrix] --> [Similarity Matcher\nCosine / Euclidean]
+[Deep Embedding Encoder\nResNet50 or ViT] --> [Similarity Matcher\nCosine / Euclidean]
+[Hybrid Feature Fusion] --> [Similarity Matcher\nCosine / Euclidean]
+[Similarity Matcher\nCosine / Euclidean] --> Gallery
+Gallery --> [Cow_ID Assignment]
+[ByteTrack / YOLO Track] --> [Cow_ID Assignment]
+[Cow_ID Assignment] --> [Annotated Images / Videos]
+[Cow_ID Assignment] --> [CSV / JSON Reports]
+[Mesh Grid Descriptor\nNxN pattern matrix] --> [Fingerprint Panels]
+[CSV / JSON Reports] --> [Charts & Dashboard]
+[Annotated Images / Videos] --> [Charts & Dashboard]
+
+@enduml

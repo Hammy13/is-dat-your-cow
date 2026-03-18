@@ -1,0 +1,128 @@
+[
+  {
+    "source_name": "11.png",
+    "source_type": "image",
+    "frame_index": null,
+    "track_id": null,
+    "x1": 0,
+    "y1": 0,
+    "x2": 645,
+    "y2": 383,
+    "yolo11_cow_id": "cow_025",
+    "yolo11_score": 0.7338272333145142,
+    "cnn_cow_id": "cow_025",
+    "cnn_score": 0.6923404335975647,
+    "hybrid_cow_id": "cow_013",
+    "hybrid_score": 0.6857818961143494,
+    "hybrid_is_new_identity": false,
+    "hybrid_rescue_reason": "duplicate_crop_rescue",
+    "hybrid_rescue_gallery_image": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152735__center_80.png",
+    "hybrid_rescue_score": 0.5316859805495749,
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\11_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\11_comparison.png",
+    "saved_gallery_image_path": "",
+    "conclusion": "Match to cow_013. Hybrid score 0.686 was below the direct threshold, but direct crop similarity 0.532 strongly matched a stored gallery crop.",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152735.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152735__center_90.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152735__center_80.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152735__left_85.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152735__right_85.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152736.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152736__center_90.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152736__center_80.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152736__left_85.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152736__right_85.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152808(0).png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152808(0)__center_90.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152808(0)__center_80.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152808(0)__left_85.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152808(0)__right_85.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152808.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152808__center_90.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152808__center_80.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152808__left_85.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152808__right_85.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152821(0).png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152821(0)__center_90.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152821(0)__center_80.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152821(0)__left_85.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152821(0)__right_85.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152821.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152821__center_90.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152821__center_80.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152821__left_85.png",
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\images\\20260314_152821__right_85.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_013",
+        "score": 0.6857818961143494,
+        "centroid_score": 0.6857818961143494,
+        "exemplar_score": 0.6529759168624878,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\embeddings\\20260314_152736__center_80_hybrid.npy"
+      },
+      {
+        "cow_id": "cow_010",
+        "score": 0.6486420035362244,
+        "centroid_score": 0.6486420035362244,
+        "exemplar_score": 0.6227709054946899,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_010\\embeddings\\20260314_152706__left_85_hybrid.npy"
+      },
+      {
+        "cow_id": "cow_023",
+        "score": 0.6247184872627258,
+        "centroid_score": 0.6247184872627258,
+        "exemplar_score": 0.6044394969940186,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_023\\embeddings\\20260314_152924(0)__right_85_hybrid.npy"
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_012",
+        "score": 0.7338272333145142,
+        "centroid_score": 0.7338272333145142,
+        "exemplar_score": 0.678658664226532,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_012\\descriptors\\20260314_152812__center_80_mesh.npy"
+      },
+      {
+        "cow_id": "cow_004",
+        "score": 0.711933434009552,
+        "centroid_score": 0.711933434009552,
+        "exemplar_score": 0.6592248678207397,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_004\\descriptors\\20260314_152621(0)_mesh.npy"
+      },
+      {
+        "cow_id": "cow_010",
+        "score": 0.7105407118797302,
+        "centroid_score": 0.7105407118797302,
+        "exemplar_score": 0.668380856513977,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_010\\descriptors\\20260314_152706_mesh.npy"
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_013",
+        "score": 0.6923404335975647,
+        "centroid_score": 0.6837844252586365,
+        "exemplar_score": 0.6923404335975647,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\embeddings\\20260314_152736__center_80_cnn.npy"
+      },
+      {
+        "cow_id": "cow_010",
+        "score": 0.6428231596946716,
+        "centroid_score": 0.6139180660247803,
+        "exemplar_score": 0.6428231596946716,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_010\\embeddings\\20260314_152706__left_85_cnn.npy"
+      },
+      {
+        "cow_id": "cow_023",
+        "score": 0.6194453835487366,
+        "centroid_score": 0.6176700592041016,
+        "exemplar_score": 0.6194453835487366,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_023\\embeddings\\20260314_152924(0)__right_85_cnn.npy"
+      }
+    ]
+  }
+]

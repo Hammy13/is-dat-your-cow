@@ -1,0 +1,134 @@
+[
+  {
+    "source_name": "query_001.jpg",
+    "source_type": "image",
+    "frame_index": null,
+    "track_id": null,
+    "x1": 1,
+    "y1": 700,
+    "x2": 1681,
+    "y2": 1804,
+    "yolo11_cow_id": "cow_001",
+    "yolo11_score": 0.9307065606117249,
+    "cnn_cow_id": "cow_022",
+    "cnn_score": 0.48254454135894775,
+    "hybrid_cow_id": "cow_022",
+    "hybrid_score": 0.6104046702384949,
+    "hybrid_is_new_identity": true,
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\query_001_1_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\query_001_1_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_022\\images\\query_001_1.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_022",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_022\\images\\query_001_1.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_018",
+        "score": 0.6104046702384949
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.5191851258277893
+      },
+      {
+        "cow_id": "cow_001",
+        "score": 0.4999675750732422
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_001",
+        "score": 0.9307065606117249
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.8516926765441895
+      },
+      {
+        "cow_id": "cow_004",
+        "score": 0.7567716240882874
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_019",
+        "score": 0.48254454135894775
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4821506142616272
+      },
+      {
+        "cow_id": "cow_020",
+        "score": 0.4804695248603821
+      }
+    ]
+  },
+  {
+    "source_name": "query_001.jpg",
+    "source_type": "image",
+    "frame_index": null,
+    "track_id": null,
+    "x1": 3007,
+    "y1": 693,
+    "x2": 4000,
+    "y2": 866,
+    "yolo11_cow_id": "cow_019",
+    "yolo11_score": 1.0,
+    "cnn_cow_id": "cow_022",
+    "cnn_score": 0.999066174030304,
+    "hybrid_cow_id": "cow_023",
+    "hybrid_score": 0.8285865783691406,
+    "hybrid_is_new_identity": true,
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\query_001_2_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\query_001_2_comparison.png",
+    "saved_gallery_image_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_023\\images\\query_001_2.png",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_023",
+    "hybrid_gallery_images": [
+      "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_023\\images\\query_001_2.png"
+    ],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_022",
+        "score": 0.8285865783691406
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.6889815330505371
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.5340927839279175
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_019",
+        "score": 1.0
+      },
+      {
+        "cow_id": "cow_004",
+        "score": 0.644882321357727
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.63860023021698
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_022",
+        "score": 0.999066174030304
+      },
+      {
+        "cow_id": "cow_019",
+        "score": 0.4807790517807007
+      },
+      {
+        "cow_id": "cow_018",
+        "score": 0.4804200232028961
+      }
+    ]
+  }
+]

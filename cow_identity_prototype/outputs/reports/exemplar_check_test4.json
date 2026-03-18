@@ -1,0 +1,95 @@
+[
+  {
+    "source_name": "test4.jpg",
+    "source_type": "image",
+    "frame_index": null,
+    "track_id": null,
+    "x1": 0,
+    "y1": 0,
+    "x2": 521,
+    "y2": 933,
+    "yolo11_cow_id": "cow_017",
+    "yolo11_score": 0.7619534730911255,
+    "cnn_cow_id": "cow_017",
+    "cnn_score": 0.702494740486145,
+    "hybrid_cow_id": "cow_017",
+    "hybrid_score": 0.7057492733001709,
+    "hybrid_is_new_identity": true,
+    "hybrid_rescue_reason": "",
+    "fingerprint_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\test4_fingerprint.png",
+    "comparison_panel_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\outputs\\fingerprints\\test4_comparison.png",
+    "saved_gallery_image_path": "",
+    "conclusion": "No match. Created cow_017 because hybrid score 0.706 was below threshold 0.830. Best existing candidate was cow_006 at 0.706.",
+    "hybrid_gallery_folder": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_017",
+    "hybrid_gallery_images": [],
+    "hybrid_top_matches": [
+      {
+        "cow_id": "cow_006",
+        "score": 0.7057492733001709,
+        "centroid_score": 0.7057492733001709,
+        "exemplar_score": 0.6650487184524536,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_006\\embeddings\\20260314_152732_hybrid.npy"
+      },
+      {
+        "cow_id": "cow_001",
+        "score": 0.690727949142456,
+        "centroid_score": 0.690727949142456,
+        "exemplar_score": 0.6552942395210266,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_001\\embeddings\\20260314_152540_hybrid.npy"
+      },
+      {
+        "cow_id": "cow_013",
+        "score": 0.6717513203620911,
+        "centroid_score": 0.6717513203620911,
+        "exemplar_score": 0.6359652280807495,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\embeddings\\20260314_152922_hybrid.npy"
+      }
+    ],
+    "yolo11_top_matches": [
+      {
+        "cow_id": "cow_003",
+        "score": 0.7619534730911255,
+        "centroid_score": 0.7619534730911255,
+        "exemplar_score": 0.7169471979141235,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_003\\descriptors\\20260314_152623_mesh.npy"
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.7560448050498962,
+        "centroid_score": 0.7560448050498962,
+        "exemplar_score": 0.7265604138374329,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_006\\descriptors\\20260314_152738_mesh.npy"
+      },
+      {
+        "cow_id": "cow_001",
+        "score": 0.7390024065971375,
+        "centroid_score": 0.7390024065971375,
+        "exemplar_score": 0.7265594005584717,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_001\\descriptors\\20260314_152541_mesh.npy"
+      }
+    ],
+    "cnn_top_matches": [
+      {
+        "cow_id": "cow_013",
+        "score": 0.702494740486145,
+        "centroid_score": 0.702494740486145,
+        "exemplar_score": 0.7002314329147339,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_013\\embeddings\\20260314_152922_cnn.npy"
+      },
+      {
+        "cow_id": "cow_014",
+        "score": 0.6857585310935974,
+        "centroid_score": 0.6857585310935974,
+        "exemplar_score": 0.6857585310935974,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_014\\embeddings\\20260314_153003(0)_cnn.npy"
+      },
+      {
+        "cow_id": "cow_006",
+        "score": 0.6736502051353455,
+        "centroid_score": 0.6736502051353455,
+        "exemplar_score": 0.6619069576263428,
+        "best_vector_path": "D:\\KSAIM\\Team_Project\\workspace\\is-dat-your-cow\\cow_identity_prototype\\gallery\\cow_006\\embeddings\\20260314_152732_cnn.npy"
+      }
+    ]
+  }
+]
