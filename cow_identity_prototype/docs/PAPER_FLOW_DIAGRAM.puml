@@ -1,0 +1,33 @@
+@startuml
+title Cow Identity Prototype - Data Flow Diagram
+top to bottom direction
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam packageStyle rectangle
+
+rectangle "Training Images" as Train
+rectangle "Query Image / Video" as Query
+rectangle "YOLO Detection\n(+ Tracking for Video)" as Detect
+rectangle "Cow Crop Extraction" as Crop
+rectangle "Mesh-Grid Descriptor" as Mesh
+rectangle "Deep Embedding\n(ResNet50 / ViT)" as Deep
+rectangle "Hybrid Feature Fusion" as Fusion
+database "Identity Gallery" as Gallery
+rectangle "Similarity Matching" as Match
+rectangle "Cow_ID Decision\n(existing / new / not-a-cow)" as Decision
+rectangle "Annotated Results\nReports + Analytics" as Output
+
+Train --> Detect
+Query --> Detect
+Detect --> Crop
+Crop --> Mesh
+Crop --> Deep
+Mesh --> Fusion
+Deep --> Fusion
+Fusion --> Gallery : build / update
+Fusion --> Match
+Gallery --> Match
+Match --> Decision
+Decision --> Output
+
+@enduml

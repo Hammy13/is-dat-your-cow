@@ -75,8 +75,9 @@ cow_identity_prototype/
 3. Mesh-grid, CNN/ViT, and hybrid vectors are computed.
 4. Similarity scores are calculated against gallery identities.
 5. If the similarity exceeds the threshold, the matching `Cow_ID` is assigned.
-6. If no match is strong enough, a new `cow_###` identity is created.
-7. Annotated media, reports, and analytics are saved under `outputs/`.
+6. If no cow is detected at all, the system rejects the input as `not a cow`.
+7. If a cow is detected but no match is strong enough, a new `cow_###` identity is created.
+8. Annotated media, reports, and analytics are saved under `outputs/`.
 
 ## Algorithms Used
 
@@ -99,6 +100,8 @@ Each cow crop is divided into a regular `N x N` grid. For each cell the system c
 
 This forms a structured fingerprint that represents the coat pattern distribution.
 
+The implementation also computes a normalized per-grid `grid_score` that reflects how strongly each cell contributes to the mesh descriptor. This score is saved in the mesh metadata and rendered in the fingerprint panel as an annotated grid-score map. In addition, each cell now displays compact per-cell values for grid score (`G`), dark percentage (`D`), light percentage (`L`), texture (`T`), and edge strength (`E`) to improve interpretability for research analysis.
+
 ### Deep Embedding Branch
 
 The deep branch extracts a global visual embedding using:
@@ -109,6 +112,11 @@ The deep branch extracts a global visual embedding using:
 ### Hybrid Matching
 
 The hybrid vector concatenates weighted mesh-grid and deep embedding vectors. Matching is performed with cosine similarity.
+
+For video inference, the Hybrid branch now adds two track-level steps before the identity is treated as stable:
+
+- pose-aware side-view filtering that prefers broad-side, sharper views for identity evidence
+- multi-view identity fusion that blends the best views from the same track before final Hybrid scoring
 
 ### Gallery Clustering
 
@@ -276,16 +284,15 @@ Recommended evaluation procedure:
 
 ## Limitations
 
-- Side-view heuristics are still simple.
+- Side-view scoring is still heuristic and not learned from labeled pose annotations.
 - YOLO detections may fail under severe occlusion or mud.
+- Non-cow rejection depends on the detector finding zero cow candidates; confident false-positive cow detections can still pass into identity matching.
 - Gallery updates during inference can introduce drift if thresholds are too loose.
 - The current prototype is optimized for research exploration, not production deployment.
 
 ## Future Improvements
 
 - stronger learned re-identification model fine-tuned on cow identities
-- pose-aware side-view filtering
-- multi-view identity fusion
 - stronger track-level aggregation before gallery updates
 - SQLite-backed metadata store for larger galleries
 - explicit top-k verification panel in the dashboard with similarity bars

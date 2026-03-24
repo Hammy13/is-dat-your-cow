@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 import json
 from collections import defaultdict
 from pathlib import Path
@@ -18,7 +19,7 @@ from .embedding import DeepEmbeddingExtractor
 from .gallery import IdentityGallery, cosine_similarity
 from .mesh import MeshDescriptorExtractor
 from .preprocessing import load_image_bgr
-from .types import MatchDecision
+from .types import Detection, MatchDecision
 from .visualization import (
     create_video_writer,
     draw_detection,
@@ -291,6 +292,184 @@ class CowIdentityPipeline:
         )
         return decisions
 
+    def _clone_decisions(self, decisions: dict[str, MatchDecision]) -> dict[str, MatchDecision]:
+        cloned: dict[str, MatchDecision] = {}
+        for model_name, decision in decisions.items():
+            cloned[model_name] = MatchDecision(
+                model_name=decision.model_name,
+                cow_id=decision.cow_id,
+                score=decision.score,
+                is_new_identity=decision.is_new_identity,
+                threshold=decision.threshold,
+                metadata=deepcopy(decision.metadata),
+            )
+        return cloned
+
+    def _normalize_vector(self, vector: np.ndarray) -> np.ndarray:
+        normalized = np.asarray(vector, dtype=np.float32).copy()
+        normalized /= max(np.linalg.norm(normalized), 1e-6)
+        return normalized
+
+    def _track_view_quality(self, detection: Detection) -> float:
+        sharpness_scale = max(self.config.inference.min_sharpness * 4.0, 1.0)
+        sharpness_component = min(detection.sharpness / sharpness_scale, 1.0)
+        confidence_component = min(max(detection.confidence, 0.0), 1.0)
+        return float(
+            (0.55 * detection.side_view_score)
+            + (0.25 * sharpness_component)
+            + (0.20 * confidence_component)
+        )
+
+    def _build_track_observation(
+        self,
+        detection: Detection,
+        vectors: dict[str, np.ndarray | dict],
+        decisions: dict[str, MatchDecision],
+        frame_index: int,
+    ) -> dict[str, Any]:
+        x1, y1, x2, y2 = detection.box
+        return {
+            "view_id": f"{detection.track_id or 'det'}_{frame_index}_{x1}_{y1}_{x2}_{y2}",
+            "frame_index": frame_index,
+            "box": detection.box,
+            "crop_bgr": detection.crop_bgr,
+            "vectors": vectors,
+            "decisions": self._clone_decisions(decisions),
+            "quality_score": self._track_view_quality(detection),
+            "side_view_score": float(detection.side_view_score),
+            "sharpness": float(detection.sharpness),
+            "confidence": float(detection.confidence),
+            "pose_qualified": (
+                detection.side_view_score >= self.config.inference.pose_aware_side_view_min_score
+            ),
+        }
+
+    def _select_track_views(self, observations: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], bool]:
+        if not observations:
+            return [], False
+        ranked = sorted(
+            observations,
+            key=lambda item: (
+                item["quality_score"],
+                item["side_view_score"],
+                item["sharpness"],
+                item["confidence"],
+            ),
+            reverse=True,
+        )
+        max_views = max(1, self.config.matching.multi_view_fusion_max_views)
+        if not self.config.inference.enable_pose_aware_side_view_filtering:
+            return ranked[:max_views], False
+
+        pose_views = [item for item in ranked if item["pose_qualified"]]
+        if not pose_views:
+            return ranked[:max_views], False
+
+        selected: list[dict[str, Any]] = []
+        selected_ids: set[str] = set()
+        for item in pose_views:
+            if len(selected) >= max_views:
+                break
+            selected.append(item)
+            selected_ids.add(item["view_id"])
+        if len(selected) < min(max_views, max(1, self.config.matching.multi_view_fusion_min_views)):
+            for item in ranked:
+                if len(selected) >= max_views:
+                    break
+                if item["view_id"] in selected_ids:
+                    continue
+                selected.append(item)
+                selected_ids.add(item["view_id"])
+        return selected, True
+
+    def _fuse_track_vectors(self, selected_views: list[dict[str, Any]]) -> tuple[dict[str, np.ndarray | dict], dict[str, Any]]:
+        representative = selected_views[0]
+        weights = np.asarray([item["quality_score"] for item in selected_views], dtype=np.float32)
+        if not np.isfinite(weights).all() or float(np.sum(weights)) <= 0.0:
+            weights = np.ones(len(selected_views), dtype=np.float32)
+        weights /= max(float(np.sum(weights)), 1e-6)
+
+        def fuse(key: str) -> np.ndarray:
+            stacked = np.stack([np.asarray(item["vectors"][key], dtype=np.float32) for item in selected_views], axis=0)
+            fused = np.sum(stacked * weights[:, None], axis=0)
+            return self._normalize_vector(fused)
+
+        fused_yolo = fuse("yolo11_vector")
+        fused_cnn = fuse("cnn_vector")
+        fused_hybrid = np.concatenate(
+            [
+                fused_yolo * self.config.matching.hybrid_mesh_weight,
+                fused_cnn * self.config.matching.hybrid_deep_weight,
+            ]
+        ).astype(np.float32)
+        fused_hybrid = self._normalize_vector(fused_hybrid)
+        fused_mesh_payload = deepcopy(representative["vectors"]["mesh"])
+        fused_mesh_payload["vector"] = fused_yolo
+
+        return (
+            {
+                "mesh": fused_mesh_payload,
+                "yolo11_vector": fused_yolo,
+                "cnn_vector": fused_cnn,
+                "hybrid_vector": fused_hybrid,
+            },
+            representative,
+        )
+
+    def _attach_track_fusion_metadata(
+        self,
+        decisions: dict[str, MatchDecision],
+        selected_views: list[dict[str, Any]],
+        total_views: int,
+        representative: dict[str, Any],
+        pose_filtered: bool,
+    ) -> dict[str, MatchDecision]:
+        if not selected_views:
+            return decisions
+        fusion_metadata = {
+            "total_views": total_views,
+            "selected_views": len(selected_views),
+            "selected_frame_indices": [int(item["frame_index"]) for item in selected_views],
+            "representative_frame_index": int(representative["frame_index"]),
+            "pose_filtered": pose_filtered,
+            "pose_view_count": sum(1 for item in selected_views if item["pose_qualified"]),
+            "max_side_view_score": max(float(item["side_view_score"]) for item in selected_views),
+        }
+        for decision in decisions.values():
+            decision.metadata = deepcopy(decision.metadata)
+            decision.metadata["track_fusion"] = fusion_metadata
+        return decisions
+
+    def _resolve_track_decisions(
+        self,
+        gallery: IdentityGallery,
+        observations: list[dict[str, Any]],
+    ) -> tuple[dict[str, MatchDecision], dict[str, Any], dict[str, np.ndarray | dict]]:
+        selected_views, pose_filtered = self._select_track_views(observations)
+        if not selected_views:
+            raise ValueError("Track fusion requires at least one observation.")
+        representative = selected_views[0]
+        if len(selected_views) >= 2:
+            fused_vectors, representative = self._fuse_track_vectors(selected_views)
+            decisions = gallery.match_all(
+                fused_vectors["yolo11_vector"],
+                fused_vectors["cnn_vector"],
+                fused_vectors["hybrid_vector"],
+            )
+            decisions = self._apply_duplicate_crop_rescue(gallery, representative["crop_bgr"], fused_vectors, decisions)
+            decisions = self._apply_local_pattern_rescue(gallery, representative["crop_bgr"], fused_vectors, decisions)
+        else:
+            fused_vectors = representative["vectors"]
+            decisions = self._clone_decisions(representative["decisions"])
+        decisions = self._attach_track_fusion_metadata(
+            decisions,
+            selected_views,
+            total_views=len(observations),
+            representative=representative,
+            pose_filtered=pose_filtered,
+        )
+        return decisions, representative, fused_vectors
+
     def _save_gallery_observation(
         self,
         gallery: IdentityGallery,
@@ -357,14 +536,12 @@ class CowIdentityPipeline:
     def build_gallery_from_uploads(self, upload_dir: str | Path | None = None, gallery_path: str | Path | None = None) -> Path:
         upload_dir = Path(upload_dir or self.config.paths.train_uploads_dir)
         gallery_root = Path(self.config.paths.gallery_root)
-        if gallery_root.exists():
-            for path in gallery_root.iterdir():
-                if path.name == "README.md":
-                    continue
-                if path.is_dir():
-                    shutil.rmtree(path, ignore_errors=True)
-                elif path.is_file():
-                    path.unlink(missing_ok=True)
+        staging_root = gallery_root.parent / f"{gallery_root.name}__build_tmp"
+        backup_root = gallery_root.parent / f"{gallery_root.name}__backup"
+        if staging_root.exists():
+            shutil.rmtree(staging_root, ignore_errors=True)
+        if backup_root.exists():
+            shutil.rmtree(backup_root, ignore_errors=True)
         image_paths = list_images(upload_dir)
         observations: list[dict[str, Any]] = []
         for image_path in image_paths:
@@ -379,48 +556,82 @@ class CowIdentityPipeline:
                     "vectors": vectors,
                 }
             )
+        original_gallery_root = self.config.paths.gallery_root
         gallery = IdentityGallery(self.config)
-        if not observations:
-            return gallery.save(gallery_path)
+        try:
+            self.config.paths.gallery_root = str(staging_root)
+            gallery = IdentityGallery(self.config)
 
-        feature_matrix = np.stack([obs["vectors"]["hybrid_vector"] for obs in observations])
-        clustering = DBSCAN(
-            eps=self.config.training.auto_cluster_eps,
-            min_samples=self.config.training.auto_cluster_min_samples,
-            metric="cosine",
-        )
-        labels = clustering.fit_predict(feature_matrix)
+            if observations:
+                feature_matrix = np.stack([obs["vectors"]["hybrid_vector"] for obs in observations])
+                clustering = DBSCAN(
+                    eps=self.config.training.auto_cluster_eps,
+                    min_samples=self.config.training.auto_cluster_min_samples,
+                    metric="cosine",
+                )
+                labels = clustering.fit_predict(feature_matrix)
 
-        normalized_labels: list[int] = []
-        next_noise_label = max([label for label in labels if label >= 0], default=-1) + 1
-        for label in labels.tolist():
-            if label == -1:
-                normalized_labels.append(next_noise_label)
-                next_noise_label += 1
+                normalized_labels: list[int] = []
+                next_noise_label = max([label for label in labels if label >= 0], default=-1) + 1
+                for label in labels.tolist():
+                    if label == -1:
+                        normalized_labels.append(next_noise_label)
+                        next_noise_label += 1
+                    else:
+                        normalized_labels.append(label)
+
+                label_to_cow_id = {label: f"cow_{index:03d}" for index, label in enumerate(sorted(set(normalized_labels)), start=1)}
+                grouped_vectors: dict[int, list[np.ndarray]] = defaultdict(list)
+                for label, observation in zip(normalized_labels, observations):
+                    grouped_vectors[label].append(observation["vectors"]["hybrid_vector"])
+
+                for label, observation in zip(normalized_labels, observations):
+                    cow_id = label_to_cow_id[label]
+                    centroid = np.mean(np.stack(grouped_vectors[label]), axis=0)
+                    centroid /= max(np.linalg.norm(centroid), 1e-6)
+                    similarity = cosine_similarity(observation["vectors"]["hybrid_vector"], centroid)
+                    self._save_gallery_variants(
+                        gallery,
+                        cow_id=cow_id,
+                        crop_bgr=observation["crop_bgr"],
+                        source_name=str(observation["image_path"]),
+                        observation_stem=observation["image_path"].stem,
+                        notes_prefix="Auto-clustered from train_uploads",
+                        base_similarity_stats={"cluster_similarity": similarity},
+                    )
             else:
-                normalized_labels.append(label)
+                label_to_cow_id = {}
 
-        label_to_cow_id = {label: f"cow_{index:03d}" for index, label in enumerate(sorted(set(normalized_labels)), start=1)}
-        grouped_vectors: dict[int, list[np.ndarray]] = defaultdict(list)
-        for label, observation in zip(normalized_labels, observations):
-            grouped_vectors[label].append(observation["vectors"]["hybrid_vector"])
+            self.config.paths.gallery_root = original_gallery_root
+            if backup_root.exists():
+                shutil.rmtree(backup_root, ignore_errors=True)
+            if gallery_root.exists():
+                shutil.move(str(gallery_root), str(backup_root))
+            if staging_root.exists():
+                shutil.move(str(staging_root), str(gallery_root))
+            else:
+                gallery_root.mkdir(parents=True, exist_ok=True)
 
-        for label, observation in zip(normalized_labels, observations):
-            cow_id = label_to_cow_id[label]
-            centroid = np.mean(np.stack(grouped_vectors[label]), axis=0)
-            centroid /= max(np.linalg.norm(centroid), 1e-6)
-            similarity = cosine_similarity(observation["vectors"]["hybrid_vector"], centroid)
-            self._save_gallery_variants(
-                gallery,
-                cow_id=cow_id,
-                crop_bgr=observation["crop_bgr"],
-                source_name=str(observation["image_path"]),
-                observation_stem=observation["image_path"].stem,
-                notes_prefix="Auto-clustered from train_uploads",
-                base_similarity_stats={"cluster_similarity": similarity},
-            )
+            backup_readme = backup_root / "README.md"
+            target_readme = gallery_root / "README.md"
+            if backup_readme.exists() and not target_readme.exists():
+                shutil.copy2(backup_readme, target_readme)
 
-        gallery_path = gallery.save(gallery_path)
+            gallery_path = gallery.save(gallery_path)
+            if backup_root.exists():
+                shutil.rmtree(backup_root, ignore_errors=True)
+        except Exception:
+            self.config.paths.gallery_root = original_gallery_root
+            if backup_root.exists():
+                if gallery_root.exists():
+                    shutil.rmtree(gallery_root, ignore_errors=True)
+                shutil.move(str(backup_root), str(gallery_root))
+            raise
+        finally:
+            self.config.paths.gallery_root = original_gallery_root
+            if staging_root.exists():
+                shutil.rmtree(staging_root, ignore_errors=True)
+
         summary_path = Path(self.config.paths.gallery_root) / "gallery_build_summary.json"
         summary_path.write_text(
             json.dumps(
@@ -447,10 +658,82 @@ class CowIdentityPipeline:
             "cnn_top_matches": decisions["cnn"].metadata.get("top_matches", []),
         }
 
+    def _build_non_cow_record(
+        self,
+        source_name: str,
+        source_type: str,
+        frame_index: int | None = None,
+        box: tuple[int, int, int, int] = (0, 0, 0, 0),
+        track_id: int | None = None,
+        reason: str = "no_cow_detected",
+        conclusion: str = "This input does not appear to contain a cow.",
+    ) -> dict[str, Any]:
+        return {
+            "source_name": source_name,
+            "source_type": source_type,
+            "frame_index": frame_index,
+            "track_id": track_id,
+            "x1": box[0],
+            "y1": box[1],
+            "x2": box[2],
+            "y2": box[3],
+            "yolo11_cow_id": "NOT_A_COW",
+            "yolo11_score": 0.0,
+            "cnn_cow_id": "NOT_A_COW",
+            "cnn_score": 0.0,
+            "hybrid_cow_id": "NOT_A_COW",
+            "hybrid_score": 0.0,
+            "hybrid_is_new_identity": False,
+            "hybrid_rescue_reason": "",
+            "hybrid_rescue_gallery_image": "",
+            "hybrid_rescue_score": 0.0,
+            "track_fusion_selected_views": 0,
+            "track_fusion_total_views": 0,
+            "track_fusion_pose_filtered": False,
+            "track_fusion_representative_frame_index": frame_index,
+            "fingerprint_path": "",
+            "comparison_panel_path": "",
+            "saved_gallery_image_path": "",
+            "hybrid_gallery_folder": "",
+            "hybrid_gallery_images": [],
+            "hybrid_top_matches": [],
+            "yolo11_top_matches": [],
+            "cnn_top_matches": [],
+            "is_cow_input": False,
+            "input_rejection_reason": reason,
+            "conclusion": conclusion,
+        }
+
+    def _fallback_cow_presence(self, decisions: dict[str, MatchDecision]) -> dict[str, Any]:
+        yolo_score = float(decisions["yolo11"].score)
+        cnn_score = float(decisions["cnn"].score)
+        hybrid_score = float(decisions["hybrid"].score)
+        ensemble_score = (0.20 * yolo_score) + (0.40 * cnn_score) + (0.40 * hybrid_score)
+        low_support_count = sum(
+            [
+                yolo_score >= 0.55,
+                cnn_score >= 0.55,
+                hybrid_score >= 0.50,
+            ]
+        )
+        strong_single_model = max(yolo_score, cnn_score, hybrid_score) >= 0.78
+        is_cow_like = bool((ensemble_score >= 0.50 and low_support_count >= 2) or strong_single_model)
+        return {
+            "ensemble_score": ensemble_score,
+            "low_support_count": low_support_count,
+            "strong_single_model": strong_single_model,
+            "is_cow_like": is_cow_like,
+        }
+
     def _build_conclusion(self, decisions: dict[str, MatchDecision]) -> str:
         hybrid = decisions["hybrid"]
         yolo = decisions["yolo11"]
         cnn = decisions["cnn"]
+        track_fusion = hybrid.metadata.get("track_fusion", {})
+        fusion_suffix = ""
+        if track_fusion.get("selected_views", 0) >= 2:
+            filtering_note = " with pose-aware side-view filtering" if track_fusion.get("pose_filtered") else ""
+            fusion_suffix = f" using {track_fusion['selected_views']} fused track views{filtering_note}"
         if hybrid.is_new_identity:
             top_matches = hybrid.metadata.get("top_matches", [])
             if top_matches:
@@ -458,32 +741,32 @@ class CowIdentityPipeline:
                 return (
                     f"No match. Created {hybrid.cow_id} because hybrid score {hybrid.score:.3f} "
                     f"was below threshold {hybrid.threshold:.3f}. Best existing candidate was "
-                    f"{best_existing['cow_id']} at {best_existing['score']:.3f}."
+                    f"{best_existing['cow_id']} at {best_existing['score']:.3f}{fusion_suffix}."
                 )
             return (
                 f"No match. Created {hybrid.cow_id} because the gallery did not contain a confident "
-                f"existing match."
+                f"existing match{fusion_suffix}."
             )
         if hybrid.metadata.get("rescue_reason") == "ensemble_consensus":
             return (
                 f"Match to {hybrid.cow_id}. Hybrid score {hybrid.score:.3f} was near the threshold, "
-                f"but CNN score {cnn.score:.3f} and ensemble agreement rescued the existing identity."
+                f"but CNN score {cnn.score:.3f} and ensemble agreement rescued the existing identity{fusion_suffix}."
             )
         if hybrid.metadata.get("rescue_reason") == "duplicate_crop_rescue":
             duplicate_crop = hybrid.metadata.get("duplicate_crop", {})
             return (
                 f"Match to {hybrid.cow_id}. Hybrid score {hybrid.score:.3f} was below the direct threshold, "
-                f"but direct crop similarity {duplicate_crop.get('duplicate_score', 0.0):.3f} strongly matched a stored gallery crop."
+                f"but direct crop similarity {duplicate_crop.get('duplicate_score', 0.0):.3f} strongly matched a stored gallery crop{fusion_suffix}."
             )
         if hybrid.metadata.get("rescue_reason") == "local_pattern_rescue":
             local_pattern = hybrid.metadata.get("local_pattern", {})
             return (
                 f"Match to {hybrid.cow_id}. Global hybrid score {hybrid.score:.3f} was below the direct threshold, "
-                f"but local coat-pattern alignment score {local_pattern.get('local_score', 0.0):.3f} matched the stored gallery crop."
+                f"but local coat-pattern alignment score {local_pattern.get('local_score', 0.0):.3f} matched the stored gallery crop{fusion_suffix}."
             )
         return (
             f"Match to {hybrid.cow_id}. Hybrid score {hybrid.score:.3f} exceeded threshold "
-            f"{hybrid.threshold:.3f}; supporting scores were YOLO11={yolo.score:.3f} and CNN={cnn.score:.3f}."
+            f"{hybrid.threshold:.3f}; supporting scores were YOLO11={yolo.score:.3f} and CNN={cnn.score:.3f}{fusion_suffix}."
         )
 
     def _build_record(
@@ -500,6 +783,7 @@ class CowIdentityPipeline:
         gallery_observation_path: str,
     ) -> dict:
         hybrid_metadata = decisions["hybrid"].metadata
+        track_fusion = hybrid_metadata.get("track_fusion", {})
         duplicate_crop = hybrid_metadata.get("duplicate_crop", {})
         local_pattern = hybrid_metadata.get("local_pattern", {})
         rescue_gallery_image = (
@@ -531,6 +815,12 @@ class CowIdentityPipeline:
             "hybrid_rescue_reason": hybrid_metadata.get("rescue_reason", ""),
             "hybrid_rescue_gallery_image": rescue_gallery_image,
             "hybrid_rescue_score": rescue_score,
+            "track_fusion_selected_views": track_fusion.get("selected_views", 1),
+            "track_fusion_total_views": track_fusion.get("total_views", 1),
+            "track_fusion_pose_filtered": bool(track_fusion.get("pose_filtered", False)),
+            "track_fusion_representative_frame_index": track_fusion.get("representative_frame_index", frame_index),
+            "is_cow_input": True,
+            "input_rejection_reason": "",
             "fingerprint_path": fingerprint_path,
             "comparison_panel_path": comparison_path,
             "saved_gallery_image_path": gallery_observation_path,
@@ -538,6 +828,32 @@ class CowIdentityPipeline:
         }
         payload.update(self._record_gallery_context(gallery, decisions))
         return payload
+
+    def _refresh_track_records(
+        self,
+        records: list[dict[str, Any]],
+        gallery: IdentityGallery,
+        source_name: str,
+        track_id: int,
+        decisions: dict[str, MatchDecision],
+        saved_gallery_image_path: str,
+    ) -> None:
+        for record in records:
+            if record["source_name"] != source_name or record.get("track_id") != track_id:
+                continue
+            refreshed = self._build_record(
+                gallery,
+                source_name=record["source_name"],
+                source_type=record["source_type"],
+                frame_index=record["frame_index"],
+                box=(record["x1"], record["y1"], record["x2"], record["y2"]),
+                track_id=track_id,
+                decisions=self._clone_decisions(decisions),
+                fingerprint_path=record["fingerprint_path"],
+                comparison_path=record["comparison_panel_path"],
+                gallery_observation_path=saved_gallery_image_path,
+            )
+            record.update(refreshed)
 
     def _write_canonical_outputs(self, records: list[dict], summary: dict, source_type: str) -> None:
         output_root = Path(self.config.paths.output_root)
@@ -568,7 +884,7 @@ class CowIdentityPipeline:
         annotated_dir.mkdir(parents=True, exist_ok=True)
         for image_path in list_images(image_dir):
             image = load_image_bgr(image_path)
-            detections = self.detector.detect_image(image)
+            detections, raw_cow_candidates = self.detector.detect_image_with_context(image)
             annotated = image.copy()
             if not detections:
                 crop_bgr = image
@@ -576,10 +892,27 @@ class CowIdentityPipeline:
                 vectors, decisions, best_crop, variant_name = self._match_crop_best_variant(gallery, crop_bgr)
                 decisions = self._apply_duplicate_crop_rescue(gallery, best_crop, vectors, decisions)
                 decisions = self._apply_local_pattern_rescue(gallery, best_crop, vectors, decisions)
+                if raw_cow_candidates == 0:
+                    fallback_presence = self._fallback_cow_presence(decisions)
+                    if not fallback_presence["is_cow_like"]:
+                        records.append(
+                            self._build_non_cow_record(
+                                source_name=image_path.name,
+                                source_type="image",
+                                box=box,
+                                reason="no_cow_detected",
+                                conclusion="This image does not appear to contain a cow, so no cow identity was assigned.",
+                            )
+                        )
+                        output_image = annotated_dir / f"{image_path.stem}_annotated.png"
+                        cv2.imwrite(str(output_image), annotated)
+                        continue
                 fingerprint = save_fingerprint_panel(
                     self.config,
                     image_path.name,
                     best_crop,
+                    vectors["mesh"]["matrix"],
+                    vectors["mesh"]["score_map"],
                     vectors["mesh"]["dark_map"],
                     vectors["mesh"]["light_map"],
                     vectors["mesh"]["texture_map"],
@@ -631,6 +964,8 @@ class CowIdentityPipeline:
                         self.config,
                         f"{image_path.stem}_{index}",
                         best_crop,
+                        vectors["mesh"]["matrix"],
+                        vectors["mesh"]["score_map"],
                         vectors["mesh"]["dark_map"],
                         vectors["mesh"]["light_map"],
                         vectors["mesh"]["texture_map"],
@@ -710,7 +1045,8 @@ class CowIdentityPipeline:
         annotated_dir.mkdir(parents=True, exist_ok=True)
         for video_path in list_videos(video_dir):
             track_assignments: dict[int, dict[str, Any]] = {}
-            seen_hybrid_ids: set[str] = set()
+            raw_cow_candidates_seen = 0
+            fallback_video_candidate: dict[str, Any] | None = None
             cap = cv2.VideoCapture(str(video_path))
             fps = cap.get(cv2.CAP_PROP_FPS) or 15.0
             width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH) or 1280)
@@ -719,30 +1055,124 @@ class CowIdentityPipeline:
             effective_fps = max(fps / max(self.config.inference.sample_every_n_frames, 1), 1.0)
             writer = create_video_writer(annotated_dir / f"{video_path.stem}_annotated.mp4", effective_fps, (width, height))
             try:
-                for frame_index, frame, detections in self.detector.track_video(video_path):
+                for frame_index, frame, detections, raw_candidate_count in self.detector.track_video_with_context(video_path):
+                    raw_cow_candidates_seen += int(raw_candidate_count)
                     annotated = frame.copy()
-                    for detection in detections:
-                        vectors = self._extract_vectors(detection.crop_bgr)
-                        if detection.track_id is not None and detection.track_id in track_assignments:
-                            decisions = track_assignments[detection.track_id]["decisions"]
-                            track_assignments[detection.track_id]["hits"] += 1
-                            existing_images = gallery.get_gallery_images(decisions["hybrid"].cow_id)
-                            observation_metadata = {
-                                "crop_image_path": existing_images[-1] if existing_images else ""
+                    if not detections and raw_candidate_count == 0:
+                        fallback_vectors, fallback_decisions, fallback_crop, fallback_variant = self._match_crop_best_variant(gallery, frame)
+                        fallback_decisions = self._apply_duplicate_crop_rescue(gallery, fallback_crop, fallback_vectors, fallback_decisions)
+                        fallback_decisions = self._apply_local_pattern_rescue(gallery, fallback_crop, fallback_vectors, fallback_decisions)
+                        fallback_presence = self._fallback_cow_presence(fallback_decisions)
+                        fallback_rank = (
+                            int(fallback_presence["is_cow_like"]),
+                            int(fallback_presence["low_support_count"]),
+                            float(fallback_presence["ensemble_score"]),
+                            float(fallback_decisions["hybrid"].score),
+                        )
+                        if fallback_video_candidate is None or fallback_rank > fallback_video_candidate["rank"]:
+                            fallback_video_candidate = {
+                                "rank": fallback_rank,
+                                "frame_index": frame_index,
+                                "frame_shape": frame.shape,
+                                "vectors": fallback_vectors,
+                                "decisions": fallback_decisions,
+                                "best_crop": fallback_crop,
+                                "variant_name": fallback_variant,
+                                "presence": fallback_presence,
                             }
+                    for detection in detections:
+                        current_vectors = self._extract_vectors(detection.crop_bgr)
+                        current_decisions = gallery.match_all(
+                            current_vectors["yolo11_vector"],
+                            current_vectors["cnn_vector"],
+                            current_vectors["hybrid_vector"],
+                        )
+                        current_decisions = self._apply_duplicate_crop_rescue(
+                            gallery,
+                            detection.crop_bgr,
+                            current_vectors,
+                            current_decisions,
+                        )
+                        current_decisions = self._apply_local_pattern_rescue(
+                            gallery,
+                            detection.crop_bgr,
+                            current_vectors,
+                            current_decisions,
+                        )
+
+                        representative_observation: dict[str, Any] | None = None
+                        vectors_for_output = current_vectors
+                        observation_metadata = {"crop_image_path": ""}
+                        if detection.track_id is not None:
+                            state = track_assignments.setdefault(
+                                detection.track_id,
+                                {
+                                    "hits": 0,
+                                    "locked": False,
+                                    "observations": [],
+                                    "decisions": None,
+                                    "representative_observation": None,
+                                    "fused_vectors": None,
+                                    "gallery_saved": False,
+                                    "gallery_observation": {"crop_image_path": ""},
+                                },
+                            )
+                            state["hits"] += 1
+                            if not state["locked"]:
+                                observation = self._build_track_observation(
+                                    detection,
+                                    current_vectors,
+                                    current_decisions,
+                                    frame_index,
+                                )
+                                state["observations"].append(observation)
+                                decisions, representative_observation, vectors_for_output = self._resolve_track_decisions(
+                                    gallery,
+                                    state["observations"],
+                                )
+                                state["decisions"] = self._clone_decisions(decisions)
+                                state["representative_observation"] = representative_observation
+                                state["fused_vectors"] = vectors_for_output
+                                if state["hits"] >= self.config.matching.min_track_hits:
+                                    state["locked"] = True
+                                    if update_gallery and not state["gallery_saved"]:
+                                        state["gallery_observation"] = self._save_gallery_observation(
+                                            gallery,
+                                            cow_id=decisions["hybrid"].cow_id,
+                                            crop_bgr=representative_observation["crop_bgr"],
+                                            vectors=vectors_for_output,
+                                            source_name=video_path.name,
+                                            observation_name=f"{video_path.stem}_{representative_observation['frame_index']}_{detection.track_id}_fused",
+                                            similarity_stats={
+                                                "hybrid_score": decisions["hybrid"].score,
+                                                "yolo11_score": decisions["yolo11"].score,
+                                                "cnn_score": decisions["cnn"].score,
+                                                "selected_views": decisions["hybrid"].metadata.get("track_fusion", {}).get("selected_views", 1),
+                                            },
+                                            notes="Video inference track observation with multi-view fusion",
+                                        )
+                                        state["gallery_saved"] = True
+                                        self._refresh_track_records(
+                                            records,
+                                            gallery,
+                                            video_path.name,
+                                            detection.track_id,
+                                            decisions,
+                                            state["gallery_observation"].get("crop_image_path", ""),
+                                        )
+                            else:
+                                decisions = self._clone_decisions(state["decisions"])
+                                representative_observation = state["representative_observation"]
+                                vectors_for_output = state["fused_vectors"] or current_vectors
+                            observation_metadata = state["gallery_observation"]
                         else:
-                            decisions = gallery.match_all(vectors["yolo11_vector"], vectors["cnn_vector"], vectors["hybrid_vector"])
-                            decisions = self._apply_duplicate_crop_rescue(gallery, detection.crop_bgr, vectors, decisions)
-                            decisions = self._apply_local_pattern_rescue(gallery, detection.crop_bgr, vectors, decisions)
-                            if detection.track_id is not None:
-                                track_assignments[detection.track_id] = {"hits": 1, "decisions": decisions}
-                            observation_metadata = {"crop_image_path": ""}
+                            decisions = current_decisions
                             if update_gallery:
                                 observation_metadata = self._save_gallery_observation(
                                     gallery,
                                     cow_id=decisions["hybrid"].cow_id,
                                     crop_bgr=detection.crop_bgr,
-                                    vectors=vectors,
+                                    vectors=current_vectors,
                                     source_name=video_path.name,
                                     observation_name=f"{video_path.stem}_{frame_index}_{detection.track_id or 'det'}",
                                     similarity_stats={
@@ -750,20 +1180,32 @@ class CowIdentityPipeline:
                                         "yolo11_score": decisions["yolo11"].score,
                                         "cnn_score": decisions["cnn"].score,
                                     },
-                                    notes="Video inference track observation",
+                                    notes="Video inference detection observation",
                                 )
+                        panel_crop = (
+                            representative_observation["crop_bgr"]
+                            if representative_observation is not None
+                            else detection.crop_bgr
+                        )
+                        panel_vectors = (
+                            representative_observation["vectors"]
+                            if representative_observation is not None
+                            else vectors_for_output
+                        )
                         fingerprint = save_fingerprint_panel(
                             self.config,
                             f"{video_path.stem}_{frame_index}_{detection.track_id or 'det'}",
-                            detection.crop_bgr,
-                            vectors["mesh"]["dark_map"],
-                            vectors["mesh"]["light_map"],
-                            vectors["mesh"]["texture_map"],
+                            panel_crop,
+                            panel_vectors["mesh"]["matrix"],
+                            panel_vectors["mesh"]["score_map"],
+                            panel_vectors["mesh"]["dark_map"],
+                            panel_vectors["mesh"]["light_map"],
+                            panel_vectors["mesh"]["texture_map"],
                         )
                         comparison = save_match_comparison_panel(
                             self.config,
                             f"{video_path.stem}_{frame_index}_{detection.track_id or 'det'}",
-                            detection.crop_bgr,
+                            panel_crop,
                             gallery.get_gallery_images(decisions["hybrid"].cow_id),
                             decisions,
                             self.config.mesh.grid_size,
@@ -782,19 +1224,118 @@ class CowIdentityPipeline:
                                 observation_metadata.get("crop_image_path", ""),
                             )
                         )
-                        seen_hybrid_ids.add(decisions["hybrid"].cow_id)
                         annotated = draw_mesh_overlay(annotated, detection, self.config.mesh.grid_size)
                         annotated = draw_detection(annotated, detection, decisions)
                     writer.write(annotated)
             finally:
                 writer.release()
+            if update_gallery:
+                for track_id, state in track_assignments.items():
+                    if state["gallery_saved"] or state["decisions"] is None or state["representative_observation"] is None:
+                        continue
+                    state["gallery_observation"] = self._save_gallery_observation(
+                        gallery,
+                        cow_id=state["decisions"]["hybrid"].cow_id,
+                        crop_bgr=state["representative_observation"]["crop_bgr"],
+                        vectors=state["fused_vectors"] or state["representative_observation"]["vectors"],
+                        source_name=video_path.name,
+                        observation_name=f"{video_path.stem}_{state['representative_observation']['frame_index']}_{track_id}_fused",
+                        similarity_stats={
+                            "hybrid_score": state["decisions"]["hybrid"].score,
+                            "yolo11_score": state["decisions"]["yolo11"].score,
+                            "cnn_score": state["decisions"]["cnn"].score,
+                            "selected_views": state["decisions"]["hybrid"].metadata.get("track_fusion", {}).get("selected_views", 1),
+                        },
+                        notes="Video inference track observation with multi-view fusion",
+                    )
+                    state["gallery_saved"] = True
+                    self._refresh_track_records(
+                        records,
+                        gallery,
+                        video_path.name,
+                        track_id,
+                        state["decisions"],
+                        state["gallery_observation"].get("crop_image_path", ""),
+                    )
+            for track_id, state in track_assignments.items():
+                if state["decisions"] is None:
+                    continue
+                self._refresh_track_records(
+                    records,
+                    gallery,
+                    video_path.name,
+                    track_id,
+                    state["decisions"],
+                    state["gallery_observation"].get("crop_image_path", ""),
+                )
             source_records = [record for record in records if record["source_name"] == video_path.name]
+            if not source_records and raw_cow_candidates_seen == 0:
+                if fallback_video_candidate is not None and fallback_video_candidate["presence"]["is_cow_like"]:
+                    frame_index = int(fallback_video_candidate["frame_index"])
+                    box = (
+                        0,
+                        0,
+                        int(fallback_video_candidate["frame_shape"][1]),
+                        int(fallback_video_candidate["frame_shape"][0]),
+                    )
+                    fingerprint = save_fingerprint_panel(
+                        self.config,
+                        f"{video_path.stem}_{frame_index}_fallback",
+                        fallback_video_candidate["best_crop"],
+                        fallback_video_candidate["vectors"]["mesh"]["matrix"],
+                        fallback_video_candidate["vectors"]["mesh"]["score_map"],
+                        fallback_video_candidate["vectors"]["mesh"]["dark_map"],
+                        fallback_video_candidate["vectors"]["mesh"]["light_map"],
+                        fallback_video_candidate["vectors"]["mesh"]["texture_map"],
+                    )
+                    comparison = save_match_comparison_panel(
+                        self.config,
+                        f"{video_path.stem}_{frame_index}_fallback",
+                        fallback_video_candidate["best_crop"],
+                        gallery.get_gallery_images(fallback_video_candidate["decisions"]["hybrid"].cow_id),
+                        fallback_video_candidate["decisions"],
+                        self.config.mesh.grid_size,
+                    )
+                    records.append(
+                        self._build_record(
+                            gallery,
+                            video_path.name,
+                            "video",
+                            frame_index,
+                            box,
+                            None,
+                            fallback_video_candidate["decisions"],
+                            str(fingerprint),
+                            str(comparison),
+                            "",
+                        )
+                    )
+                else:
+                    records.append(
+                        self._build_non_cow_record(
+                            source_name=video_path.name,
+                            source_type="video",
+                            reason="no_cow_detected",
+                            conclusion="This video does not appear to contain a cow, so no cow identity was assigned.",
+                        )
+                    )
+                source_records = [record for record in records if record["source_name"] == video_path.name]
+            valid_source_records = [record for record in source_records if bool(record.get("is_cow_input", True))]
+            hybrid_ids = {record["hybrid_cow_id"] for record in valid_source_records if record["track_id"] is None}
+            yolo_ids = {record["yolo11_cow_id"] for record in valid_source_records if record["track_id"] is None}
+            cnn_ids = {record["cnn_cow_id"] for record in valid_source_records if record["track_id"] is None}
+            for state in track_assignments.values():
+                if state["decisions"] is None:
+                    continue
+                hybrid_ids.add(state["decisions"]["hybrid"].cow_id)
+                yolo_ids.add(state["decisions"]["yolo11"].cow_id)
+                cnn_ids.add(state["decisions"]["cnn"].cow_id)
             per_video_summary.append(
                 {
                     "video": video_path.name,
-                    "predicted_unique_cows_hybrid": len(seen_hybrid_ids),
-                    "predicted_unique_cows_yolo11": len({record["yolo11_cow_id"] for record in source_records}),
-                    "predicted_unique_cows_cnn": len({record["cnn_cow_id"] for record in source_records}),
+                    "predicted_unique_cows_hybrid": len(hybrid_ids),
+                    "predicted_unique_cows_yolo11": len(yolo_ids),
+                    "predicted_unique_cows_cnn": len(cnn_ids),
                     "tracked_objects": len(track_assignments),
                 }
             )

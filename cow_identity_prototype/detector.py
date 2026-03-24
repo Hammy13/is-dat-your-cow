@@ -28,6 +28,15 @@ class CowDetector:
             return ids or None
         return None
 
+    def _raw_box_count(self, result) -> int:
+        boxes = getattr(result, "boxes", None)
+        if boxes is None or boxes.xyxy is None:
+            return 0
+        try:
+            return int(len(boxes.xyxy))
+        except Exception:
+            return 0
+
     def _build_detections(self, image: np.ndarray, result) -> list[Detection]:
         detections: list[Detection] = []
         boxes = getattr(result, "boxes", None)
@@ -64,7 +73,7 @@ class CowDetector:
             )
         return detections
 
-    def detect_image(self, image: np.ndarray) -> list[Detection]:
+    def _predict_image_result(self, image: np.ndarray):
         results = self.model.predict(
             image,
             conf=self.config.detector.confidence,
@@ -73,7 +82,15 @@ class CowDetector:
             classes=self.cow_class_ids,
             verbose=False,
         )
-        return self._build_detections(image, results[0])
+        return results[0]
+
+    def detect_image_with_context(self, image: np.ndarray) -> tuple[list[Detection], int]:
+        result = self._predict_image_result(image)
+        return self._build_detections(image, result), self._raw_box_count(result)
+
+    def detect_image(self, image: np.ndarray) -> list[Detection]:
+        detections, _ = self.detect_image_with_context(image)
+        return detections
 
     def detect_best(self, image: np.ndarray) -> Detection | None:
         detections = self.detect_image(image)
@@ -83,6 +100,10 @@ class CowDetector:
         return detections[0]
 
     def track_video(self, video_path: str | Path):
+        for frame_index, frame, detections, _ in self.track_video_with_context(video_path):
+            yield frame_index, frame, detections
+
+    def track_video_with_context(self, video_path: str | Path):
         cap = cv2.VideoCapture(str(video_path))
         if not cap.isOpened():
             raise FileNotFoundError(f"Unable to open video: {video_path}")
@@ -105,8 +126,9 @@ class CowDetector:
                     persist=True,
                     verbose=False,
                 )
-                detections = self._build_detections(frame, results[0])
-                yield frame_index, frame, detections
+                result = results[0]
+                detections = self._build_detections(frame, result)
+                yield frame_index, frame, detections, self._raw_box_count(result)
                 frame_index += 1
         finally:
             cap.release()

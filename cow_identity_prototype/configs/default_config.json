@@ -28,14 +28,18 @@
     "hybrid_mesh_weight": 0.45,
     "hybrid_deep_weight": 0.55,
     "allow_new_identity": true,
-    "min_track_hits": 3
+    "min_track_hits": 3,
+    "multi_view_fusion_max_views": 5,
+    "multi_view_fusion_min_views": 2
   },
   "inference": {
     "sample_every_n_frames": 2,
     "side_view_min_aspect_ratio": 1.0,
     "min_crop_area_ratio": 0.01,
     "min_sharpness": 20.0,
-    "save_debug_panels": true
+    "save_debug_panels": true,
+    "enable_pose_aware_side_view_filtering": true,
+    "pose_aware_side_view_min_score": 0.45
   },
   "training": {
     "auto_cluster_eps": 0.24,

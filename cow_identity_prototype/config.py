@@ -54,6 +54,8 @@ class MatchingConfig:
     hybrid_deep_weight: float = 0.55
     allow_new_identity: bool = True
     min_track_hits: int = 3
+    multi_view_fusion_max_views: int = 5
+    multi_view_fusion_min_views: int = 2
 
 
 @dataclass
@@ -63,6 +65,8 @@ class InferenceConfig:
     min_crop_area_ratio: float = 0.01
     min_sharpness: float = 20.0
     save_debug_panels: bool = True
+    enable_pose_aware_side_view_filtering: bool = True
+    pose_aware_side_view_min_score: float = 0.45
 
 
 @dataclass

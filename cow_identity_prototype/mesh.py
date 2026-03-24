@@ -22,6 +22,7 @@ class MeshDescriptorExtractor:
         dark_map = np.zeros((grid, grid), dtype=np.float32)
         light_map = np.zeros((grid, grid), dtype=np.float32)
         texture_map = np.zeros((grid, grid), dtype=np.float32)
+        score_map = np.zeros((grid, grid), dtype=np.float32)
         for row in range(grid):
             matrix_row: list[dict[str, float]] = []
             for col in range(grid):
@@ -42,6 +43,20 @@ class MeshDescriptorExtractor:
                 gradient_x = cv2.Sobel(cell_gray, cv2.CV_32F, 1, 0, ksize=3)
                 gradient_y = cv2.Sobel(cell_gray, cv2.CV_32F, 0, 1, ksize=3)
                 edge_strength = float(np.mean(np.sqrt(gradient_x**2 + gradient_y**2)) / 255.0)
+                cell_vector = [
+                    dark_pct,
+                    light_pct,
+                    float(rgb_mean[0]),
+                    float(rgb_mean[1]),
+                    float(rgb_mean[2]),
+                    float(rgb_std[0]),
+                    float(rgb_std[1]),
+                    float(rgb_std[2]),
+                    texture,
+                    edge_strength,
+                ]
+                cell_vector.extend(float(value) for value in hue_hist.tolist())
+                grid_score_raw = float(np.linalg.norm(np.asarray(cell_vector, dtype=np.float32)))
                 features = {
                     "dark_pct": dark_pct,
                     "light_pct": light_pct,
@@ -53,34 +68,27 @@ class MeshDescriptorExtractor:
                     "red_std": float(rgb_std[2]),
                     "texture": texture,
                     "edge_strength": edge_strength,
+                    "grid_score_raw": grid_score_raw,
                 }
                 matrix_row.append(features)
                 dark_map[row, col] = dark_pct
                 light_map[row, col] = light_pct
                 texture_map[row, col] = texture
-                vector.extend(
-                    [
-                        dark_pct,
-                        light_pct,
-                        float(rgb_mean[0]),
-                        float(rgb_mean[1]),
-                        float(rgb_mean[2]),
-                        float(rgb_std[0]),
-                        float(rgb_std[1]),
-                        float(rgb_std[2]),
-                        texture,
-                        edge_strength,
-                    ]
-                )
-                vector.extend(float(value) for value in hue_hist.tolist())
+                score_map[row, col] = grid_score_raw
+                vector.extend(cell_vector)
             matrix.append(matrix_row)
         descriptor = np.asarray(vector, dtype=np.float32)
         descriptor /= max(np.linalg.norm(descriptor), 1e-6)
+        score_map /= max(float(score_map.max()), 1e-6)
+        for row in range(grid):
+            for col in range(grid):
+                matrix[row][col]["grid_score"] = float(score_map[row, col])
         return {
             "vector": descriptor,
             "matrix": matrix,
             "dark_map": dark_map,
             "light_map": light_map,
             "texture_map": texture_map,
+            "score_map": score_map,
             "preview": resized,
         }

@@ -360,24 +360,27 @@ with main_col:
             right.dataframe(records, use_container_width=True)
             if not records.empty:
                 best = records.iloc[0]
-                st.markdown(f"**Predicted Hybrid Cow_ID:** `{best['hybrid_cow_id']}`")
-                if bool(best["hybrid_is_new_identity"]):
-                    st.warning("This query was treated as a new cow. The crop has been saved into a new gallery folder.")
-                elif best.get("hybrid_rescue_reason"):
-                    st.info(f"Existing identity was recovered by `{best['hybrid_rescue_reason']}`.")
-                st.markdown(f"**Manual verification folder:** `{best['hybrid_gallery_folder']}`")
-                if best.get("saved_gallery_image_path"):
-                    st.markdown(f"**Saved gallery crop:** `{best['saved_gallery_image_path']}`")
-                if best.get("comparison_panel_path") and Path(best["comparison_panel_path"]).exists():
-                    st.image(best["comparison_panel_path"], caption="Query vs matched gallery comparison", use_container_width=True)
-                _render_rescue_evidence(best)
-                st.markdown("**Gallery images for manual verification**")
-                _render_gallery_images(best["hybrid_gallery_images"], best["hybrid_cow_id"])
-                st.markdown("**Conclusion**")
-                st.success(best["conclusion"])
+                if not bool(best.get("is_cow_input", True)):
+                    st.error(best["conclusion"])
+                else:
+                    st.markdown(f"**Predicted Hybrid Cow_ID:** `{best['hybrid_cow_id']}`")
+                    if bool(best["hybrid_is_new_identity"]):
+                        st.warning("This query was treated as a new cow. The crop has been saved into a new gallery folder.")
+                    elif best.get("hybrid_rescue_reason"):
+                        st.info(f"Existing identity was recovered by `{best['hybrid_rescue_reason']}`.")
+                    st.markdown(f"**Manual verification folder:** `{best['hybrid_gallery_folder']}`")
+                    if best.get("saved_gallery_image_path"):
+                        st.markdown(f"**Saved gallery crop:** `{best['saved_gallery_image_path']}`")
+                    if best.get("comparison_panel_path") and Path(best["comparison_panel_path"]).exists():
+                        st.image(best["comparison_panel_path"], caption="Query vs matched gallery comparison", use_container_width=True)
+                    _render_rescue_evidence(best)
+                    st.markdown("**Gallery images for manual verification**")
+                    _render_gallery_images(best["hybrid_gallery_images"], best["hybrid_cow_id"])
+                    st.markdown("**Conclusion**")
+                    st.success(best["conclusion"])
                 _log(
                     f"Image inference complete for {saved[0].name}: {best['conclusion']}",
-                    "success" if not best["hybrid_is_new_identity"] else "warning",
+                    "error" if not bool(best.get("is_cow_input", True)) else ("success" if not best["hybrid_is_new_identity"] else "warning"),
                     "image",
                 )
 
@@ -399,25 +402,35 @@ with main_col:
             records = pd.DataFrame(result["records"])
             st.dataframe(records.head(200), use_container_width=True)
             if not records.empty:
-                summary = records.groupby("hybrid_cow_id").size().reset_index(name="frames_seen")
-                st.dataframe(summary, use_container_width=True)
-                selected_cow_id = st.selectbox("Show gallery images for predicted Cow_ID", summary["hybrid_cow_id"].tolist(), key="video_cow_picker")
-                gallery_index = _load_gallery_index()
-                payload = gallery_index.get("cows", {}).get(selected_cow_id, {})
-                matching_rows = records[records["hybrid_cow_id"] == selected_cow_id]
-                if not matching_rows.empty:
-                    best_row = matching_rows.iloc[0]
-                    if best_row.get("comparison_panel_path") and Path(best_row["comparison_panel_path"]).exists():
-                        st.image(best_row["comparison_panel_path"], caption=f"Comparison panel for {selected_cow_id}", use_container_width=True)
-                    _render_rescue_evidence(best_row)
-                    st.markdown("**Conclusion**")
-                    st.success(best_row["conclusion"])
+                valid_records = records[records.get("is_cow_input", True).fillna(True)] if "is_cow_input" in records.columns else records
+                if valid_records.empty:
+                    best_row = records.iloc[0]
+                    st.error(best_row["conclusion"])
                     _log(
                         f"Video inference complete for {saved[0].name}: {best_row['conclusion']}",
-                        "success" if not best_row["hybrid_is_new_identity"] else "warning",
+                        "error",
                         "video",
                     )
-                _render_gallery_images(payload.get("gallery_images", []), selected_cow_id)
+                else:
+                    summary = valid_records.groupby("hybrid_cow_id").size().reset_index(name="frames_seen")
+                    st.dataframe(summary, use_container_width=True)
+                    selected_cow_id = st.selectbox("Show gallery images for predicted Cow_ID", summary["hybrid_cow_id"].tolist(), key="video_cow_picker")
+                    gallery_index = _load_gallery_index()
+                    payload = gallery_index.get("cows", {}).get(selected_cow_id, {})
+                    matching_rows = valid_records[valid_records["hybrid_cow_id"] == selected_cow_id]
+                    if not matching_rows.empty:
+                        best_row = matching_rows.iloc[0]
+                        if best_row.get("comparison_panel_path") and Path(best_row["comparison_panel_path"]).exists():
+                            st.image(best_row["comparison_panel_path"], caption=f"Comparison panel for {selected_cow_id}", use_container_width=True)
+                        _render_rescue_evidence(best_row)
+                        st.markdown("**Conclusion**")
+                        st.success(best_row["conclusion"])
+                        _log(
+                            f"Video inference complete for {saved[0].name}: {best_row['conclusion']}",
+                            "success" if not best_row["hybrid_is_new_identity"] else "warning",
+                            "video",
+                        )
+                    _render_gallery_images(payload.get("gallery_images", []), selected_cow_id)
 
     with analytics_tab:
         st.subheader("Analytics")
