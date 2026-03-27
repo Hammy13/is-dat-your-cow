@@ -62,6 +62,8 @@ class IdentityGallery:
                     "dark_map_mean": float(np.mean(mesh_payload["dark_map"])),
                     "light_map_mean": float(np.mean(mesh_payload["light_map"])),
                     "texture_map_mean": float(np.mean(mesh_payload["texture_map"])),
+                    "score_map_mean": float(np.mean(mesh_payload["score_map"])),
+                    "score_map_max": float(np.max(mesh_payload["score_map"])),
                     "mesh_matrix": mesh_payload["matrix"],
                     "similarity_stats": similarity_stats or {},
                     "notes": notes or "",
@@ -383,7 +385,15 @@ class IdentityGallery:
         if entry is None:
             return []
         observations = entry.metadata.get("observations", [])
-        return [obs.get("crop_image_path") for obs in observations if obs.get("crop_image_path")]
+        paths: list[str] = []
+        for observation in observations:
+            raw_path = observation.get("crop_image_path")
+            if not raw_path:
+                continue
+            image_path = Path(str(raw_path))
+            if image_path.exists():
+                paths.append(str(image_path))
+        return paths
 
     def _next_cow_id(self) -> str:
         existing = []
@@ -395,4 +405,9 @@ class IdentityGallery:
                 except ValueError:
                     continue
         next_index = max(existing, default=0) + 1
-        return f"cow_{next_index:03d}"
+        prefix = "cow_"
+        for cow_id in self.entries:
+            if str(cow_id).startswith("COW_"):
+                prefix = "COW_"
+                break
+        return f"{prefix}{next_index:03d}"

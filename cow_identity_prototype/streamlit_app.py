@@ -85,14 +85,24 @@ def _load_gallery_index() -> dict:
     return payload
 
 
+def _normalize_ui_path(raw_path: str) -> str:
+    return str(raw_path).replace('\\\\?\\', "", 1)
+
+
 def _render_gallery_images(paths: list[str], caption_prefix: str) -> None:
-    existing_paths = [path for path in paths if Path(path).exists()]
+    existing_paths: list[str] = []
+    for path in paths:
+        normalized = _normalize_ui_path(path)
+        if Path(normalized).exists():
+            existing_paths.append(normalized)
     if not existing_paths:
         st.info("No gallery images available for this Cow_ID yet.")
         return
-    columns = st.columns(min(4, max(1, len(existing_paths))))
-    for column, image_path in zip(columns, existing_paths[:4]):
-        column.image(image_path, caption=f"{caption_prefix}: {Path(image_path).name}", use_container_width=True)
+    for start in range(0, len(existing_paths), 4):
+        batch = existing_paths[start : start + 4]
+        columns = st.columns(len(batch))
+        for column, image_path in zip(columns, batch):
+            column.image(image_path, caption=f"{caption_prefix}: {Path(image_path).name}", use_container_width=True)
 
 
 def _render_rescue_evidence(record: pd.Series) -> None:
@@ -177,6 +187,28 @@ def _list_training_files() -> list[Path]:
     return sorted(path for path in root.rglob("*") if path.is_file())
 
 
+def _list_manual_cow_dirs() -> list[Path]:
+    root = Path(config.paths.gallery_dataset_dir)
+    if not root.exists():
+        return []
+    return sorted(path for path in root.iterdir() if path.is_dir())
+
+
+def _is_valid_manual_cow_id(value: str) -> bool:
+    parts = value.strip().split("_")
+    return len(parts) == 2 and parts[0] == "COW" and parts[1].isdigit() and len(parts[1]) == 3
+
+
+def _manual_dataset_has_labels() -> bool:
+    return any(_list_manual_cow_dirs())
+
+
+def _create_manual_cow_folder(cow_id: str) -> Path:
+    target = Path(config.paths.gallery_dataset_dir) / cow_id.strip()
+    target.mkdir(parents=True, exist_ok=True)
+    return target
+
+
 def _delete_gallery_image(image_path: str) -> int:
     target = Path(image_path)
     if not target.exists():
@@ -198,24 +230,35 @@ def _delete_gallery_image(image_path: str) -> int:
 
 
 def _delete_gallery_entry(cow_payload: dict, image_path: str) -> int:
-    removed = _delete_gallery_image(image_path)
-    gallery_images = cow_payload.get("gallery_images", [])
+    normalized_target = _normalize_ui_path(image_path)
+    removed = 0
     source_images = cow_payload.get("source_images", [])
-    try:
-        index = gallery_images.index(image_path)
-    except ValueError:
-        index = -1
-    if 0 <= index < len(source_images):
-        source_path = Path(source_images[index])
-        if source_path.exists():
-            source_path.unlink()
+    matched_source_paths: set[str] = set()
+    target_stem = Path(normalized_target).stem.split("__")[0]
+
+    for source_path in source_images:
+        normalized_source = _normalize_ui_path(source_path)
+        if Path(normalized_source).stem == target_stem:
+            matched_source_paths.add(normalized_source)
+
+    if not matched_source_paths:
+        matched_source_paths.add(normalized_target)
+
+    for source_path in matched_source_paths:
+        target = Path(source_path)
+        if target.exists() and target.is_file():
+            target.unlink()
             removed += 1
     return removed
 
 
 def _refresh_gallery_from_disk() -> None:
-    path = pipeline.build_gallery_from_uploads(config.paths.train_uploads_dir, config.paths.gallery_json)
-    _log(f"Refreshed gallery metadata and clustering after deletion. Output: {path}")
+    if _manual_dataset_has_labels():
+        path = pipeline.initialize_gallery(config.paths.gallery_dataset_dir, config.paths.gallery_json)
+        _log(f"Refreshed gallery from manual Cow_ID folders. Output: {path}")
+    else:
+        path = pipeline.build_gallery_from_uploads(config.paths.train_uploads_dir, config.paths.gallery_json)
+        _log(f"Refreshed gallery metadata and clustering after deletion. Output: {path}")
 
 
 main_col, log_col = st.columns([4.2, 1.3])
@@ -227,6 +270,84 @@ with main_col:
 
     with gallery_tab:
         st.subheader("Training / Gallery Creation")
+        st.markdown("**Manual Training Dataset**")
+        labeled_root = Path(config.paths.gallery_dataset_dir)
+        labeled_folders = _list_manual_cow_dirs()
+        st.markdown(f"Dataset root: `{labeled_root}`")
+        st.caption("Create folders like `COW_001`, then upload that cow's images directly into the folder from this UI.")
+
+        manual_col1, manual_col2 = st.columns([1.2, 1.8])
+        with manual_col1:
+            new_cow_id = st.text_input("New Cow_ID", value="", placeholder="COW_001", key="manual_new_cow_id")
+            if st.button("Create Cow Folder", key="create_manual_cow_folder"):
+                trimmed = new_cow_id.strip()
+                if not trimmed:
+                    st.warning("Enter a Cow_ID like `COW_001`.")
+                    _log("Attempted to create a manual Cow_ID folder without entering a name.", "warning", "gallery")
+                elif not _is_valid_manual_cow_id(trimmed):
+                    st.warning("Use the format `COW_001`, `COW_002`, `COW_003`, etc.")
+                    _log(f"Rejected invalid manual Cow_ID folder name: {trimmed}", "warning", "gallery")
+                else:
+                    folder = _create_manual_cow_folder(trimmed)
+                    st.success(f"Created folder: {folder}")
+                    _log(f"Created manual training folder {trimmed}.", "success", "gallery")
+                    st.rerun()
+
+        with manual_col2:
+            folder_options = [path.name for path in labeled_folders]
+            if folder_options:
+                selected_manual_cow_id = st.selectbox(
+                    "Upload images to Cow_ID",
+                    options=folder_options,
+                    key="manual_upload_target",
+                )
+            else:
+                selected_manual_cow_id = None
+                st.info("Create a manual Cow_ID folder first, then it will appear here for image upload.")
+            manual_uploads = st.file_uploader(
+                "Upload labeled training images",
+                type=["jpg", "jpeg", "png", "bmp", "tif", "tiff"],
+                accept_multiple_files=True,
+                key="manual_training_uploads",
+            )
+            if st.button("Save Images To Cow Folder", key="save_manual_training_uploads"):
+                if not selected_manual_cow_id:
+                    st.warning("Create or select a Cow_ID folder first.")
+                    _log("Attempted to save manual training images without selecting a Cow_ID folder.", "warning", "gallery")
+                elif not manual_uploads:
+                    st.warning("Upload one or more labeled images first.")
+                    _log(f"Attempted to save manual training images for {selected_manual_cow_id} with no files selected.", "warning", "gallery")
+                else:
+                    target_dir = labeled_root / selected_manual_cow_id
+                    saved = _save_uploaded_files(manual_uploads, target_dir)
+                    gallery_path = pipeline.initialize_gallery(config.paths.gallery_dataset_dir, config.paths.gallery_json)
+                    st.success(f"Saved {len(saved)} image(s) to {target_dir} and rebuilt the gallery at {gallery_path}")
+                    _log(
+                        f"Saved {len(saved)} labeled image(s) to manual folder {selected_manual_cow_id} and rebuilt the gallery.",
+                        "success",
+                        "gallery",
+                    )
+                    st.rerun()
+
+        if labeled_folders:
+            manual_counts = {
+                folder.name: len([path for path in folder.iterdir() if path.is_file()])
+                for folder in labeled_folders
+            }
+            st.write(
+                "Available manual Cow_ID folders: "
+                + ", ".join(f"{cow_id} ({count} image{'s' if count != 1 else ''})" for cow_id, count in manual_counts.items())
+            )
+        else:
+            st.info("No manual Cow_ID folders detected yet.")
+
+        if st.button("Build Gallery From Manual Cow_ID Folders", key="build_manual_gallery"):
+            path = pipeline.initialize_gallery(config.paths.gallery_dataset_dir, config.paths.gallery_json)
+            st.success(f"Labeled gallery built at {path}")
+            _log(f"Initialized gallery from manual Cow_ID folders. Output: {path}", "success", "gallery")
+
+        st.divider()
+        st.markdown("**Unlabeled Upload Workflow (Optional)**")
         uploaded_training = st.file_uploader(
             "Upload training cow images",
             type=["jpg", "jpeg", "png"],
@@ -263,15 +384,13 @@ with main_col:
                 _log(f"Deleted {deleted} training files from train_uploads.", "action", "gallery")
 
         col1, col2 = st.columns(2)
-        if col1.button("Build Gallery From Uploads"):
+        if col1.button("Build Gallery From Uploads", key="build_cluster_gallery"):
             path = pipeline.build_gallery_from_uploads(config.paths.train_uploads_dir, config.paths.gallery_json)
             st.success(f"Gallery built at {path}")
             _log(f"Built gallery from uploads. Output: {path}", "success", "gallery")
-        if col2.button("Initialize Gallery From Labeled Folders"):
-            path = pipeline.initialize_gallery(config.paths.gallery_dataset_dir, config.paths.gallery_json)
-            st.success(f"Labeled gallery built at {path}")
-            _log(f"Initialized gallery from labeled folders. Output: {path}", "success", "gallery")
-        st.caption("Auto-clustering uses YOLO crops + mesh-grid + deep embeddings, then groups similar cows into `gallery/cow_###`.")
+        if col2.button("Show Manual Dataset Path", key="show_manual_dataset_path"):
+            st.info(f"Manual labeled dataset root: {labeled_root}")
+        st.caption("Manual labeled initialization uses the folder names you create under the labeled dataset root. The older auto-clustering upload workflow remains available as an optional path.")
 
     with browser_tab:
         st.subheader("Manual Verification Browser")
@@ -285,13 +404,19 @@ with main_col:
                 st.session_state[browser_key] = cow_ids[0]
             selected_cow_id = st.selectbox("Cow_ID", cow_ids, key=browser_key)
             cow_payload = gallery_index["cows"][selected_cow_id]
-            st.write(f"Folder: `{cow_payload['gallery_folder']}`")
+            st.write(f"Folder: `{_normalize_ui_path(cow_payload['gallery_folder'])}`")
             st.write(f"Observation count: `{cow_payload['observation_count']}`")
-            gallery_images = [path for path in cow_payload.get("gallery_images", []) if Path(path).exists()]
+            gallery_images = [_normalize_ui_path(path) for path in cow_payload.get("gallery_images", [])]
+            source_images = [_normalize_ui_path(path) for path in cow_payload.get("source_images", [])]
+            st.markdown("**Gallery Images**")
             _render_gallery_images(gallery_images, selected_cow_id)
+            if source_images:
+                st.markdown("**Labeled Source Images**")
+                _render_gallery_images(sorted(set(source_images)), f"{selected_cow_id} source")
+            deletable_source_images = sorted(set(source_images))
             selected_gallery_images = st.multiselect(
-                "Delete specific gallery images for this Cow_ID",
-                options=gallery_images,
+                "Delete labeled images for this Cow_ID",
+                options=deletable_source_images,
                 format_func=lambda path: Path(path).name,
                 key=f"gallery_delete_{selected_cow_id}",
             )
@@ -304,9 +429,9 @@ with main_col:
                     removed_files = 0
                     for image_path in selected_gallery_images:
                         removed_files += _delete_gallery_entry(cow_payload, image_path)
-                    st.success(f"Deleted {len(selected_gallery_images)} gallery image(s) and linked source data. Refreshing gallery.")
+                    st.success(f"Deleted {len(selected_gallery_images)} labeled image(s) for {selected_cow_id}. Refreshing gallery.")
                     _log(
-                        f"Deleted {len(selected_gallery_images)} gallery image(s) from {selected_cow_id}; removed {removed_files} files including linked sources.",
+                        f"Deleted {len(selected_gallery_images)} labeled image(s) from {selected_cow_id}; removed {removed_files} file(s).",
                         "action",
                         "gallery",
                     )
@@ -335,10 +460,9 @@ with main_col:
                     st.rerun()
             if st.button("Rebuild / Refresh Gallery Metadata", key=f"refresh_gallery_{selected_cow_id}"):
                 _refresh_gallery_from_disk()
-                st.success("Gallery metadata rebuilt from current train_uploads.")
-                _log(f"Rebuilt gallery metadata from train_uploads for browser refresh.", "success", "gallery")
+                st.success("Gallery metadata rebuilt from the current training folders.")
+                _log(f"Rebuilt gallery metadata from current training folders for browser refresh.", "success", "gallery")
                 st.rerun()
-            st.json(cow_payload)
 
     with image_tab:
         st.subheader("Image Inference")
@@ -359,27 +483,83 @@ with main_col:
                 left.image(str(annotated_path), caption="Annotated query image", use_container_width=True)
             right.dataframe(records, use_container_width=True)
             if not records.empty:
-                best = records.iloc[0]
-                st.markdown(f"**Predicted Hybrid Cow_ID:** `{best['hybrid_cow_id']}`")
-                if bool(best["hybrid_is_new_identity"]):
-                    st.warning("This query was treated as a new cow. The crop has been saved into a new gallery folder.")
-                elif best.get("hybrid_rescue_reason"):
-                    st.info(f"Existing identity was recovered by `{best['hybrid_rescue_reason']}`.")
-                st.markdown(f"**Manual verification folder:** `{best['hybrid_gallery_folder']}`")
-                if best.get("saved_gallery_image_path"):
-                    st.markdown(f"**Saved gallery crop:** `{best['saved_gallery_image_path']}`")
-                if best.get("comparison_panel_path") and Path(best["comparison_panel_path"]).exists():
-                    st.image(best["comparison_panel_path"], caption="Query vs matched gallery comparison", use_container_width=True)
-                _render_rescue_evidence(best)
-                st.markdown("**Gallery images for manual verification**")
-                _render_gallery_images(best["hybrid_gallery_images"], best["hybrid_cow_id"])
-                st.markdown("**Conclusion**")
-                st.success(best["conclusion"])
-                _log(
-                    f"Image inference complete for {saved[0].name}: {best['conclusion']}",
-                    "success" if not best["hybrid_is_new_identity"] else "warning",
-                    "image",
+                image_records = records.reset_index(drop=True).copy()
+                image_records.insert(0, "detection_no", image_records.index + 1)
+                cow_records = image_records[image_records.get("is_cow_input", True).fillna(True)] if "is_cow_input" in image_records.columns else image_records
+                non_cow_records = image_records[~image_records.get("is_cow_input", True).fillna(True)] if "is_cow_input" in image_records.columns else image_records.iloc[0:0]
+
+                if cow_records.empty:
+                    best = image_records.iloc[0]
+                    st.error(best["conclusion"])
+                else:
+                    total_detections = int(len(cow_records))
+                    matched_count = int((~cow_records["hybrid_is_new_identity"].fillna(False)).sum())
+                    new_count = total_detections - matched_count
+                    st.markdown(
+                        f"**Detected cows:** `{total_detections}` | "
+                        f"**Matched:** `{matched_count}` | "
+                        f"**New:** `{new_count}`"
+                    )
+
+                    for _, detection_row in cow_records.iterrows():
+                        st.divider()
+                        st.markdown(f"### Detection {int(detection_row['detection_no'])}")
+                        st.markdown(
+                            f"**Predicted Hybrid Cow_ID:** `{detection_row['hybrid_cow_id']}` | "
+                            f"**Hybrid score:** `{float(detection_row['hybrid_score']):.3f}`"
+                        )
+                        st.caption(
+                            "Box: "
+                            f"({int(detection_row['x1'])}, {int(detection_row['y1'])}) to "
+                            f"({int(detection_row['x2'])}, {int(detection_row['y2'])})"
+                        )
+                        if bool(detection_row["hybrid_is_new_identity"]):
+                            st.warning("This detected cow was treated as a new cow.")
+                        elif detection_row.get("hybrid_rescue_reason"):
+                            st.info(f"Existing identity was recovered by `{detection_row['hybrid_rescue_reason']}`.")
+                        else:
+                            st.success("This detected cow matched an existing gallery identity.")
+                        st.markdown(f"**Manual verification folder:** `{detection_row['hybrid_gallery_folder']}`")
+                        if detection_row.get("saved_gallery_image_path"):
+                            st.markdown(f"**Saved gallery crop:** `{detection_row['saved_gallery_image_path']}`")
+                        if detection_row.get("comparison_panel_path") and Path(str(detection_row["comparison_panel_path"])).exists():
+                            st.image(
+                                str(detection_row["comparison_panel_path"]),
+                                caption=f"Detection {int(detection_row['detection_no'])}: query vs matched gallery comparison",
+                                use_container_width=True,
+                            )
+                        _render_rescue_evidence(detection_row)
+                        st.markdown("**Gallery images for manual verification**")
+                        _render_gallery_images(detection_row["hybrid_gallery_images"], str(detection_row["hybrid_cow_id"]))
+                        st.markdown("**Conclusion**")
+                        st.success(str(detection_row["conclusion"]))
+
+                if not non_cow_records.empty:
+                    for _, non_cow_row in non_cow_records.iterrows():
+                        st.divider()
+                        st.error(str(non_cow_row["conclusion"]))
+                result_parts: list[str] = []
+                for _, row in cow_records.iterrows():
+                    result_parts.append(
+                        f"Detection {int(row['detection_no'])}: {row['hybrid_cow_id']} "
+                        f"({'new' if bool(row['hybrid_is_new_identity']) else 'matched'})"
+                    )
+                if not non_cow_records.empty:
+                    result_parts.append(f"{len(non_cow_records)} region(s) rejected as not-a-cow")
+                log_message = (
+                    f"Image inference complete for {saved[0].name}: " + "; ".join(result_parts)
+                    if result_parts
+                    else f"Image inference complete for {saved[0].name}: no results generated."
                 )
+                if not non_cow_records.empty and cow_records.empty:
+                    log_level = "error"
+                elif not cow_records.empty and bool(cow_records["hybrid_is_new_identity"].any()):
+                    log_level = "warning"
+                elif not cow_records.empty:
+                    log_level = "success"
+                else:
+                    log_level = "info"
+                _log(log_message, log_level, "image")
 
     with video_tab:
         st.subheader("Video Inference")
@@ -399,25 +579,35 @@ with main_col:
             records = pd.DataFrame(result["records"])
             st.dataframe(records.head(200), use_container_width=True)
             if not records.empty:
-                summary = records.groupby("hybrid_cow_id").size().reset_index(name="frames_seen")
-                st.dataframe(summary, use_container_width=True)
-                selected_cow_id = st.selectbox("Show gallery images for predicted Cow_ID", summary["hybrid_cow_id"].tolist(), key="video_cow_picker")
-                gallery_index = _load_gallery_index()
-                payload = gallery_index.get("cows", {}).get(selected_cow_id, {})
-                matching_rows = records[records["hybrid_cow_id"] == selected_cow_id]
-                if not matching_rows.empty:
-                    best_row = matching_rows.iloc[0]
-                    if best_row.get("comparison_panel_path") and Path(best_row["comparison_panel_path"]).exists():
-                        st.image(best_row["comparison_panel_path"], caption=f"Comparison panel for {selected_cow_id}", use_container_width=True)
-                    _render_rescue_evidence(best_row)
-                    st.markdown("**Conclusion**")
-                    st.success(best_row["conclusion"])
+                valid_records = records[records.get("is_cow_input", True).fillna(True)] if "is_cow_input" in records.columns else records
+                if valid_records.empty:
+                    best_row = records.iloc[0]
+                    st.error(best_row["conclusion"])
                     _log(
                         f"Video inference complete for {saved[0].name}: {best_row['conclusion']}",
-                        "success" if not best_row["hybrid_is_new_identity"] else "warning",
+                        "error",
                         "video",
                     )
-                _render_gallery_images(payload.get("gallery_images", []), selected_cow_id)
+                else:
+                    summary = valid_records.groupby("hybrid_cow_id").size().reset_index(name="frames_seen")
+                    st.dataframe(summary, use_container_width=True)
+                    selected_cow_id = st.selectbox("Show gallery images for predicted Cow_ID", summary["hybrid_cow_id"].tolist(), key="video_cow_picker")
+                    gallery_index = _load_gallery_index()
+                    payload = gallery_index.get("cows", {}).get(selected_cow_id, {})
+                    matching_rows = valid_records[valid_records["hybrid_cow_id"] == selected_cow_id]
+                    if not matching_rows.empty:
+                        best_row = matching_rows.iloc[0]
+                        if best_row.get("comparison_panel_path") and Path(best_row["comparison_panel_path"]).exists():
+                            st.image(best_row["comparison_panel_path"], caption=f"Comparison panel for {selected_cow_id}", use_container_width=True)
+                        _render_rescue_evidence(best_row)
+                        st.markdown("**Conclusion**")
+                        st.success(best_row["conclusion"])
+                        _log(
+                            f"Video inference complete for {saved[0].name}: {best_row['conclusion']}",
+                            "success" if not best_row["hybrid_is_new_identity"] else "warning",
+                            "video",
+                        )
+                    _render_gallery_images(payload.get("gallery_images", []), selected_cow_id)
 
     with analytics_tab:
         st.subheader("Analytics")

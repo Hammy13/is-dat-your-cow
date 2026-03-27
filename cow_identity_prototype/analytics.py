@@ -26,14 +26,31 @@ def build_summary(records: list[dict]) -> dict:
             "unique_yolo11_ids": 0,
             "unique_cnn_ids": 0,
         }
+    if "is_cow_input" in dataframe.columns:
+        valid_mask = dataframe["is_cow_input"].fillna(True).astype(bool)
+    else:
+        valid_mask = pd.Series([True] * len(dataframe), index=dataframe.index)
+    valid_dataframe = dataframe[valid_mask]
+    rejected_count = int((~valid_mask).sum())
+    if valid_dataframe.empty:
+        return {
+            "records": int(len(dataframe)),
+            "cow_records": 0,
+            "rejected_non_cow_records": rejected_count,
+            "unique_hybrid_ids": 0,
+            "unique_yolo11_ids": 0,
+            "unique_cnn_ids": 0,
+        }
     return {
         "records": int(len(dataframe)),
-        "unique_hybrid_ids": int(dataframe["hybrid_cow_id"].nunique()),
-        "unique_yolo11_ids": int(dataframe["yolo11_cow_id"].nunique()),
-        "unique_cnn_ids": int(dataframe["cnn_cow_id"].nunique()),
-        "mean_hybrid_score": float(dataframe["hybrid_score"].mean()),
-        "mean_yolo11_score": float(dataframe["yolo11_score"].mean()),
-        "mean_cnn_score": float(dataframe["cnn_score"].mean()),
+        "cow_records": int(len(valid_dataframe)),
+        "rejected_non_cow_records": rejected_count,
+        "unique_hybrid_ids": int(valid_dataframe["hybrid_cow_id"].nunique()),
+        "unique_yolo11_ids": int(valid_dataframe["yolo11_cow_id"].nunique()),
+        "unique_cnn_ids": int(valid_dataframe["cnn_cow_id"].nunique()),
+        "mean_hybrid_score": float(valid_dataframe["hybrid_score"].mean()),
+        "mean_yolo11_score": float(valid_dataframe["yolo11_score"].mean()),
+        "mean_cnn_score": float(valid_dataframe["cnn_score"].mean()),
     }
 
 
@@ -42,6 +59,10 @@ def save_analytics_dashboard(config: PrototypeConfig, records: list[dict], prefi
     analytics_dir.mkdir(parents=True, exist_ok=True)
     dataframe = pd.DataFrame(records)
     outputs: dict[str, Path] = {}
+    if dataframe.empty:
+        return outputs
+    if "is_cow_input" in dataframe.columns:
+        dataframe = dataframe[dataframe["is_cow_input"].fillna(True).astype(bool)]
     if dataframe.empty:
         return outputs
 

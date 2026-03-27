@@ -1,0 +1,267 @@
+@startuml
+title Cow Identity Prototype - Current Implementation Sequence
+
+actor User
+participant "CLI / Streamlit UI" as Entry
+participant "CowIdentityPipeline" as Pipeline
+participant "CowDetector" as Detector
+participant "MeshDescriptorExtractor" as Mesh
+participant "DeepEmbeddingExtractor" as Embed
+participant "IdentityGallery" as Gallery
+participant "Track Assignment State" as TrackState
+participant "Visualization + Analytics" as Viz
+database "Gallery / Output Files" as Files
+
+note over Entry,Pipeline
+  Streamlit and the CLI wrappers both funnel into the same
+  CowIdentityPipeline methods:
+  - build_gallery_from_uploads()
+  - initialize_gallery()
+  - infer_images()
+  - infer_videos()
+end note
+
+== Gallery Creation ==
+
+alt Build gallery from uploaded images
+  User -> Entry: build_gallery.py / "Build Gallery From Uploads"
+  Entry -> Pipeline: build_gallery_from_uploads(upload_dir, gallery_path)
+  Pipeline -> Files: clear existing gallery folders and files
+  loop each uploaded image
+    Pipeline -> Files: load_image_bgr(image_path)
+    Pipeline -> Detector: detect_best(image)
+    Detector -> Detector: YOLO predict + quality gate
+    Detector --> Pipeline: best detection or None
+    Pipeline -> Pipeline: choose crop (detected crop or full image)
+    Pipeline -> Mesh: extract(crop)
+    Mesh --> Pipeline: mesh payload + yolo11 vector
+    Pipeline -> Embed: extract(crop)
+    Embed --> Pipeline: cnn vector
+    Pipeline -> Pipeline: concatenate weighted hybrid vector
+  end
+  Pipeline -> Pipeline: DBSCAN cluster(hybrid vectors)
+  loop each clustered observation
+    Pipeline -> Pipeline: _save_gallery_variants(...)
+    loop original + cropped variants
+      Pipeline -> Mesh: extract(variant)
+      Mesh --> Pipeline: mesh payload
+      Pipeline -> Embed: extract(variant)
+      Embed --> Pipeline: cnn vector
+      Pipeline -> Gallery: save_observation_assets(...)
+      Gallery -> Files: write crop PNG + vector NPY + mesh JSON
+      Pipeline -> Gallery: add_or_update(cow_id, centroids, metadata)
+    end
+  end
+  Pipeline -> Gallery: save(gallery_path)
+  Gallery -> Files: write gallery.json + gallery_index.json + gallery_metadata.json
+  Pipeline -> Files: write gallery_build_summary.json
+  Pipeline --> Entry: gallery path
+else Initialize gallery from labeled folders
+  User -> Entry: initialize_gallery.py / "Initialize Gallery From Labeled Folders"
+  Entry -> Pipeline: initialize_gallery(dataset_dir, gallery_path)
+  loop each labeled sample
+    Pipeline -> Files: load_image_bgr(sample.image_path)
+    Pipeline -> Detector: detect_best(image)
+    Detector -> Detector: YOLO predict + quality gate
+    Detector --> Pipeline: best detection or None
+    Pipeline -> Pipeline: _save_gallery_variants(cow_id=sample.cow_id)
+    loop original + cropped variants
+      Pipeline -> Mesh: extract(variant)
+      Mesh --> Pipeline: mesh payload
+      Pipeline -> Embed: extract(variant)
+      Embed --> Pipeline: cnn vector
+      Pipeline -> Gallery: save_observation_assets(...)
+      Gallery -> Files: write crop PNG + vector NPY + mesh JSON
+      Pipeline -> Gallery: add_or_update(cow_id, centroids, metadata)
+    end
+  end
+  Pipeline -> Gallery: save(gallery_path)
+  Gallery -> Files: write gallery JSON/index/metadata
+  Pipeline -> Files: write gallery_initialization_summary.json
+  Pipeline --> Entry: gallery path
+end
+
+== Image Inference ==
+
+User -> Entry: run_inference.py --mode images / "Predict Image"
+Entry -> Pipeline: infer_images(image_dir, gallery_path, output_prefix, update_gallery)
+Pipeline -> Gallery: load(gallery_path)
+note right of Gallery
+  match_all():
+  - scores centroid and exemplar vectors
+  - prefers training IDs when present
+  - can rescue near-threshold hybrid matches
+    with ensemble consensus
+end note
+
+loop each query image
+  Pipeline -> Files: load_image_bgr(image_path)
+  Pipeline -> Detector: detect_image_with_context(image)
+  Detector -> Detector: YOLO predict + quality gate
+  Detector --> Pipeline: detections, raw_cow_candidates
+
+  alt one or more valid detections
+    loop each detection
+      Pipeline -> Pipeline: _match_crop_best_variant(crop)
+      loop original + cropped variants
+        Pipeline -> Mesh: extract(variant)
+        Mesh --> Pipeline: mesh payload
+        Pipeline -> Embed: extract(variant)
+        Embed --> Pipeline: cnn vector
+        Pipeline -> Gallery: match_all(yolo11, cnn, hybrid)
+        Gallery --> Pipeline: MatchDecision for yolo11/cnn/hybrid
+      end
+      Pipeline -> Pipeline: keep best-scoring hybrid variant
+      Pipeline -> Pipeline: _apply_duplicate_crop_rescue()
+      Pipeline -> Pipeline: _apply_local_pattern_rescue()
+      opt update_gallery
+        Pipeline -> Gallery: save matched/new observation
+        Gallery -> Files: persist crop/vector/descriptor assets
+      end
+      Pipeline -> Viz: save_fingerprint_panel(...)
+      Viz -> Files: write fingerprint image
+      Pipeline -> Viz: save_match_comparison_panel(...)
+      Viz -> Files: write comparison image
+      Pipeline -> Viz: draw_mesh_overlay() + draw_detection()
+      Viz --> Pipeline: annotated image
+      Pipeline -> Pipeline: _build_record(...)
+    end
+  else no detection passed the quality gate
+    Pipeline -> Pipeline: _match_crop_best_variant(full image)
+    Pipeline -> Pipeline: _apply_duplicate_crop_rescue()
+    Pipeline -> Pipeline: _apply_local_pattern_rescue()
+    alt raw_cow_candidates == 0 and fallback says "not cow"
+      Pipeline -> Pipeline: _build_non_cow_record()
+    else fallback still looks cow-like
+      opt update_gallery
+        Pipeline -> Gallery: save fallback observation
+        Gallery -> Files: persist crop/vector/descriptor assets
+      end
+      Pipeline -> Viz: save_fingerprint_panel(...)
+      Viz -> Files: write fingerprint image
+      Pipeline -> Viz: save_match_comparison_panel(...)
+      Viz -> Files: write comparison image
+      Pipeline -> Pipeline: _build_record(...)
+    end
+  end
+
+  Pipeline -> Files: write annotated image
+end
+
+Pipeline -> Viz: save_prediction_table(records, csv, json)
+Viz -> Files: write CSV + JSON reports
+Pipeline -> Viz: build_summary(records)
+Pipeline -> Files: write summary JSON
+Pipeline -> Viz: save_analytics_dashboard(...)
+Viz -> Files: write charts / dashboards
+Pipeline -> Files: write canonical outputs + similarity_logs.csv
+Pipeline --> Entry: report paths + records
+
+== Video Inference ==
+
+User -> Entry: run_inference.py --mode videos / "Predict Video"
+Entry -> Pipeline: infer_videos(video_dir, gallery_path, output_prefix, update_gallery)
+Pipeline -> Gallery: load(gallery_path)
+
+loop each query video
+  Pipeline -> Viz: create_video_writer(...)
+  Viz --> Pipeline: writer
+  Pipeline -> Detector: track_video_with_context(video_path)
+  loop each sampled frame
+    Detector -> Detector: YOLO track + ByteTrack + quality gate
+    Detector --> Pipeline: frame_index, frame, detections, raw_candidate_count
+
+    alt no detections and raw_candidate_count == 0
+      Pipeline -> Pipeline: rank fallback full-frame candidate
+    end
+
+    loop each detection
+      Pipeline -> Mesh: extract(detection.crop_bgr)
+      Mesh --> Pipeline: mesh payload
+      Pipeline -> Embed: extract(detection.crop_bgr)
+      Embed --> Pipeline: cnn vector
+      Pipeline -> Pipeline: build current hybrid vector
+      Pipeline -> Gallery: match_all(yolo11, cnn, hybrid)
+      Gallery --> Pipeline: current MatchDecision set
+      Pipeline -> Pipeline: _apply_duplicate_crop_rescue()
+      Pipeline -> Pipeline: _apply_local_pattern_rescue()
+
+      alt detection has track_id
+        Pipeline -> TrackState: append observation(hit, quality, pose flags, decisions)
+        Pipeline -> Pipeline: _resolve_track_decisions(observations)
+        alt two or more selected views
+          Pipeline -> Pipeline: _select_track_views()
+          Pipeline -> Pipeline: _fuse_track_vectors()
+          Pipeline -> Gallery: match_all(fused yolo11, cnn, hybrid)
+          Gallery --> Pipeline: fused MatchDecision set
+          Pipeline -> Pipeline: duplicate/local rescue on representative crop
+        else single representative view
+          Pipeline -> Pipeline: reuse representative decisions
+        end
+        Pipeline -> Pipeline: attach track_fusion metadata
+        alt hits >= min_track_hits
+          Pipeline -> TrackState: lock identity for this track
+          opt update_gallery and not yet saved
+            Pipeline -> Gallery: save fused representative observation
+            Gallery -> Files: persist track-level crop/vector/descriptor assets
+            Pipeline -> Pipeline: _refresh_track_records(...)
+          end
+        else track already locked on a previous frame
+          Pipeline -> TrackState: reuse locked decisions + fused vectors
+        end
+      else detection has no track_id
+        opt update_gallery
+          Pipeline -> Gallery: save detection observation
+          Gallery -> Files: persist crop/vector/descriptor assets
+        end
+      end
+
+      Pipeline -> Viz: save_fingerprint_panel(...)
+      Viz -> Files: write fingerprint image
+      Pipeline -> Viz: save_match_comparison_panel(...)
+      Viz -> Files: write comparison image
+      Pipeline -> Pipeline: _build_record(...)
+      Pipeline -> Viz: draw_mesh_overlay() + draw_detection()
+      Viz --> Pipeline: annotated frame
+    end
+
+    Pipeline -> Viz: writer.write(annotated frame)
+  end
+  Pipeline -> Viz: writer.release()
+
+  opt update_gallery for unfinished tracks
+    loop each unlocked track with a representative observation
+      Pipeline -> Gallery: save fused representative observation
+      Gallery -> Files: persist track-level assets
+      Pipeline -> Pipeline: _refresh_track_records(...)
+    end
+  end
+
+  alt no source records and raw_cow_candidates_seen == 0
+    alt fallback candidate still looks cow-like
+      Pipeline -> Viz: save fallback fingerprint + comparison
+      Viz -> Files: write fallback visuals
+      Pipeline -> Pipeline: _build_record(...)
+    else no convincing cow evidence
+      Pipeline -> Pipeline: _build_non_cow_record()
+    end
+  end
+
+  Pipeline -> Pipeline: build per-video unique-ID summary
+end
+
+opt update_gallery after video batch
+  Pipeline -> Gallery: save(gallery_path)
+  Gallery -> Files: write gallery JSON/index/metadata
+end
+
+Pipeline -> Viz: save_prediction_table(records, csv, json)
+Viz -> Files: write CSV + JSON reports
+Pipeline -> Files: write per_video_summary.json
+Pipeline -> Viz: build_summary(records)
+Pipeline -> Viz: save_analytics_dashboard(...)
+Viz -> Files: write charts / dashboards
+Pipeline -> Files: write canonical outputs + video_tracking_results + similarity logs
+Pipeline --> Entry: report paths + records
+
+@enduml

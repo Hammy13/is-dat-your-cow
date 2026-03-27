@@ -14,7 +14,7 @@ The implementation follows the `Unique_Cow_Identification_Architecture` and exte
    - a mesh-grid descriptor branch
    - a deep embedding branch
    - a hybrid fusion branch
-4. Training uploads are grouped into `cow_###` identities using clustering.
+4. Gallery identities are created either by clustering `train_uploads` or by reading user-labeled `COW_###` folders from `data/labeled_gallery_train`.
 5. Inference crops are matched against the gallery using cosine similarity.
 6. Videos use YOLO tracking / ByteTrack to stabilize identities across frames.
 7. Outputs, reports, and gallery artifacts are saved for review.
@@ -30,6 +30,7 @@ cow_identity_prototype/
     default_config.json
   data/
     train_uploads/
+    labeled_gallery_train/
     test_uploads/
       images/
       videos/
@@ -68,6 +69,15 @@ cow_identity_prototype/
 6. Crop images, `.npy` embedding files, `.json` descriptor files, and metadata are saved.
 7. A global gallery index is written to `gallery/gallery_index.json`.
 
+### Manual Labeled Gallery Initialization
+
+1. User manually creates folders such as `COW_001`, `COW_002`, and `COW_003` inside `data/labeled_gallery_train/`.
+2. Each folder contains only images of that single cow.
+3. The initializer reads the folder name as the identity label.
+4. YOLO extracts the cow crop from each image when possible.
+5. Mesh-grid, CNN, and Hybrid descriptors are saved into the gallery under the same `Cow_ID`.
+6. The gallery rebuild is atomic, so older gallery contents are replaced instead of being mixed with the new labeled dataset.
+
 ### Inference
 
 1. User uploads a new image or video to `data/test_uploads/`.
@@ -75,8 +85,9 @@ cow_identity_prototype/
 3. Mesh-grid, CNN/ViT, and hybrid vectors are computed.
 4. Similarity scores are calculated against gallery identities.
 5. If the similarity exceeds the threshold, the matching `Cow_ID` is assigned.
-6. If no match is strong enough, a new `cow_###` identity is created.
-7. Annotated media, reports, and analytics are saved under `outputs/`.
+6. If no cow is detected at all, the system rejects the input as `not a cow`.
+7. If a cow is detected but no match is strong enough, a new `cow_###` identity is created.
+8. Annotated media, reports, and analytics are saved under `outputs/`.
 
 ## Algorithms Used
 
@@ -99,6 +110,8 @@ Each cow crop is divided into a regular `N x N` grid. For each cell the system c
 
 This forms a structured fingerprint that represents the coat pattern distribution.
 
+The implementation also computes a normalized per-grid `grid_score` that reflects how strongly each cell contributes to the mesh descriptor. This score is saved in the mesh metadata and rendered in the fingerprint panel as an annotated grid-score map. In addition, each cell now displays compact per-cell values for grid score (`G`), dark percentage (`D`), light percentage (`L`), texture (`T`), and edge strength (`E`) to improve interpretability for research analysis.
+
 ### Deep Embedding Branch
 
 The deep branch extracts a global visual embedding using:
@@ -109,6 +122,11 @@ The deep branch extracts a global visual embedding using:
 ### Hybrid Matching
 
 The hybrid vector concatenates weighted mesh-grid and deep embedding vectors. Matching is performed with cosine similarity.
+
+For video inference, the Hybrid branch now adds two track-level steps before the identity is treated as stable:
+
+- pose-aware side-view filtering that prefers broad-side, sharper views for identity evidence
+- multi-view identity fusion that blends the best views from the same track before final Hybrid scoring
 
 ### Gallery Clustering
 
@@ -139,18 +157,18 @@ This was selected because the original `0.18` setting over-segmented the current
 cow_identity_prototype/data/train_uploads/*.jpg
 ```
 
+### Manual labeled training folders
+
+```text
+cow_identity_prototype/data/labeled_gallery_train/COW_001/*.jpg
+cow_identity_prototype/data/labeled_gallery_train/COW_002/*.jpg
+```
+
 ### Test uploads
 
 ```text
 cow_identity_prototype/data/test_uploads/images/*.jpg
 cow_identity_prototype/data/test_uploads/videos/*.mp4
-```
-
-### Labeled gallery initialization
-
-```text
-cow_identity_prototype/data/train_uploads/cow_001/*.jpg
-cow_identity_prototype/data/train_uploads/cow_002/*.jpg
 ```
 
 ## Expected Output Formats
@@ -176,6 +194,18 @@ cow_identity_prototype/data/train_uploads/cow_002/*.jpg
 
 ```bash
 .venv\Scripts\python.exe -m cow_identity_prototype.build_gallery --config cow_identity_prototype\configs\default_config.json
+```
+
+Or build the gallery from your own manually classified Cow_ID folders:
+
+```bash
+.venv\Scripts\python.exe -m cow_identity_prototype.initialize_gallery --config cow_identity_prototype\configs\default_config.json
+```
+
+Manual training root for this workflow:
+
+```text
+cow_identity_prototype/data/labeled_gallery_train/
 ```
 
 4. Run image inference:
@@ -222,6 +252,15 @@ Purpose:
 - upload training images
 - cluster similar cows
 - build `cow_###` folders
+- or rebuild the gallery directly from manually labeled `COW_###` folders under `data/labeled_gallery_train`
+
+Manual UI workflow:
+
+1. Open `Build Gallery`.
+2. Create a folder such as `COW_001`.
+3. Upload images into that folder directly from the UI.
+4. Repeat for each known cow.
+5. Click `Build Gallery From Manual Cow_ID Folders`.
 
 Placeholder:
 - see `docs/placeholders/build_gallery_placeholder.md`
@@ -276,16 +315,15 @@ Recommended evaluation procedure:
 
 ## Limitations
 
-- Side-view heuristics are still simple.
+- Side-view scoring is still heuristic and not learned from labeled pose annotations.
 - YOLO detections may fail under severe occlusion or mud.
+- Non-cow rejection depends on the detector finding zero cow candidates; confident false-positive cow detections can still pass into identity matching.
 - Gallery updates during inference can introduce drift if thresholds are too loose.
 - The current prototype is optimized for research exploration, not production deployment.
 
 ## Future Improvements
 
 - stronger learned re-identification model fine-tuned on cow identities
-- pose-aware side-view filtering
-- multi-view identity fusion
 - stronger track-level aggregation before gallery updates
 - SQLite-backed metadata store for larger galleries
 - explicit top-k verification panel in the dashboard with similarity bars
