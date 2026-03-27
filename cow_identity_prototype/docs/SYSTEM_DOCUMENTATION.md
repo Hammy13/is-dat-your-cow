@@ -14,7 +14,7 @@ The implementation follows the `Unique_Cow_Identification_Architecture` and exte
    - a mesh-grid descriptor branch
    - a deep embedding branch
    - a hybrid fusion branch
-4. Training uploads are grouped into `cow_###` identities using clustering.
+4. Gallery identities are created either by clustering `train_uploads` or by reading user-labeled `COW_###` folders from `data/labeled_gallery_train`.
 5. Inference crops are matched against the gallery using cosine similarity.
 6. Videos use YOLO tracking / ByteTrack to stabilize identities across frames.
 7. Outputs, reports, and gallery artifacts are saved for review.
@@ -30,6 +30,7 @@ cow_identity_prototype/
     default_config.json
   data/
     train_uploads/
+    labeled_gallery_train/
     test_uploads/
       images/
       videos/
@@ -67,6 +68,15 @@ cow_identity_prototype/
 5. A `cow_###` folder is created for each discovered identity.
 6. Crop images, `.npy` embedding files, `.json` descriptor files, and metadata are saved.
 7. A global gallery index is written to `gallery/gallery_index.json`.
+
+### Manual Labeled Gallery Initialization
+
+1. User manually creates folders such as `COW_001`, `COW_002`, and `COW_003` inside `data/labeled_gallery_train/`.
+2. Each folder contains only images of that single cow.
+3. The initializer reads the folder name as the identity label.
+4. YOLO extracts the cow crop from each image when possible.
+5. Mesh-grid, CNN, and Hybrid descriptors are saved into the gallery under the same `Cow_ID`.
+6. The gallery rebuild is atomic, so older gallery contents are replaced instead of being mixed with the new labeled dataset.
 
 ### Inference
 
@@ -147,18 +157,18 @@ This was selected because the original `0.18` setting over-segmented the current
 cow_identity_prototype/data/train_uploads/*.jpg
 ```
 
+### Manual labeled training folders
+
+```text
+cow_identity_prototype/data/labeled_gallery_train/COW_001/*.jpg
+cow_identity_prototype/data/labeled_gallery_train/COW_002/*.jpg
+```
+
 ### Test uploads
 
 ```text
 cow_identity_prototype/data/test_uploads/images/*.jpg
 cow_identity_prototype/data/test_uploads/videos/*.mp4
-```
-
-### Labeled gallery initialization
-
-```text
-cow_identity_prototype/data/train_uploads/cow_001/*.jpg
-cow_identity_prototype/data/train_uploads/cow_002/*.jpg
 ```
 
 ## Expected Output Formats
@@ -184,6 +194,18 @@ cow_identity_prototype/data/train_uploads/cow_002/*.jpg
 
 ```bash
 .venv\Scripts\python.exe -m cow_identity_prototype.build_gallery --config cow_identity_prototype\configs\default_config.json
+```
+
+Or build the gallery from your own manually classified Cow_ID folders:
+
+```bash
+.venv\Scripts\python.exe -m cow_identity_prototype.initialize_gallery --config cow_identity_prototype\configs\default_config.json
+```
+
+Manual training root for this workflow:
+
+```text
+cow_identity_prototype/data/labeled_gallery_train/
 ```
 
 4. Run image inference:
@@ -230,6 +252,15 @@ Purpose:
 - upload training images
 - cluster similar cows
 - build `cow_###` folders
+- or rebuild the gallery directly from manually labeled `COW_###` folders under `data/labeled_gallery_train`
+
+Manual UI workflow:
+
+1. Open `Build Gallery`.
+2. Create a folder such as `COW_001`.
+3. Upload images into that folder directly from the UI.
+4. Repeat for each known cow.
+5. Click `Build Gallery From Manual Cow_ID Folders`.
 
 Placeholder:
 - see `docs/placeholders/build_gallery_placeholder.md`

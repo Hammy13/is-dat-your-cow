@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from .config import PrototypeConfig
+from .mesh import MeshDescriptorExtractor
 from .types import Detection, MatchDecision
 
 
@@ -148,31 +149,46 @@ def save_match_comparison_panel(
     config: PrototypeConfig,
     panel_name: str,
     query_crop_bgr: np.ndarray,
+    query_mesh_payload: dict[str, np.ndarray | list[list[dict[str, float]]]],
     matched_gallery_images: list[str],
     decisions: dict[str, MatchDecision],
-    grid_size: int,
 ) -> Path:
     output_path = Path(config.paths.output_root) / "fingerprints" / f"{Path(panel_name).stem}_comparison.png"
-    top_gallery = matched_gallery_images[:3]
-    total_columns = 1 + max(1, len(top_gallery))
-    figure, axes = plt.subplots(1, total_columns, figsize=(4 * total_columns, 4))
-    if total_columns == 1:
-        axes = [axes]
-    query_with_grid = draw_grid_on_crop(query_crop_bgr, grid_size)
-    axes[0].imshow(cv2.cvtColor(query_with_grid, cv2.COLOR_BGR2RGB))
     hybrid = decisions["hybrid"]
-    axes[0].set_title(f"Query\n{hybrid.cow_id} | {hybrid.score:.2f}")
+    gallery_path = matched_gallery_images[0] if matched_gallery_images else ""
+    gallery_image = cv2.imread(gallery_path) if gallery_path else None
+    mesh_extractor = MeshDescriptorExtractor(config.mesh)
+    gallery_mesh_payload = mesh_extractor.extract(gallery_image) if gallery_image is not None else None
+
+    figure = plt.figure(figsize=(18, 12))
+    grid_spec = figure.add_gridspec(2, 2, height_ratios=[1.0, 1.6])
+    axes = [
+        figure.add_subplot(grid_spec[0, 0]),
+        figure.add_subplot(grid_spec[0, 1]),
+        figure.add_subplot(grid_spec[1, 0]),
+        figure.add_subplot(grid_spec[1, 1]),
+    ]
+
+    query_with_grid = draw_grid_on_crop(query_crop_bgr, config.mesh.grid_size)
+    axes[0].imshow(cv2.cvtColor(query_with_grid, cv2.COLOR_BGR2RGB))
+    axes[0].set_title(f"Query Crop\n{hybrid.cow_id} | H={hybrid.score:.2f}")
     axes[0].axis("off")
-    for idx, gallery_path in enumerate(top_gallery, start=1):
-        gallery_image = cv2.imread(gallery_path)
-        if gallery_image is None:
-            axes[idx].axis("off")
-            continue
-        axes[idx].imshow(cv2.cvtColor(gallery_image, cv2.COLOR_BGR2RGB))
-        axes[idx].set_title(f"Gallery {idx}\n{Path(gallery_path).stem}")
-        axes[idx].axis("off")
-    for idx in range(1 + len(top_gallery), total_columns):
-        axes[idx].axis("off")
+    render_mesh_value_grid(axes[2], query_mesh_payload["matrix"])
+    axes[2].set_title("Query Mesh Grid Values")
+
+    if gallery_image is not None and gallery_mesh_payload is not None:
+        gallery_with_grid = draw_grid_on_crop(gallery_image, config.mesh.grid_size)
+        axes[1].imshow(cv2.cvtColor(gallery_with_grid, cv2.COLOR_BGR2RGB))
+        axes[1].set_title(f"Matched Gallery Crop\n{Path(gallery_path).stem}")
+        axes[1].axis("off")
+        render_mesh_value_grid(axes[3], gallery_mesh_payload["matrix"])
+        axes[3].set_title("Matched Gallery Mesh Grid Values")
+    else:
+        axes[1].axis("off")
+        axes[1].set_title("Matched Gallery Crop")
+        axes[3].axis("off")
+        axes[3].set_title("Matched Gallery Mesh Grid Values")
+
     figure.tight_layout()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output_path, dpi=160)

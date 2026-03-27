@@ -80,6 +80,7 @@ class TrainingConfig:
 class PathsConfig:
     data_root: str = str(DEFAULT_DATA_ROOT)
     train_uploads_dir: str = str(DEFAULT_DATA_ROOT / "train_uploads")
+    labeled_gallery_dir: str = str(DEFAULT_DATA_ROOT / "labeled_gallery_train")
     test_image_dir: str = str(DEFAULT_DATA_ROOT / "test_uploads" / "images")
     test_video_dir: str = str(DEFAULT_DATA_ROOT / "test_uploads" / "videos")
     artifact_root: str = str(DEFAULT_ARTIFACT_ROOT)
@@ -95,11 +96,11 @@ class PathsConfig:
 
     @property
     def gallery_dataset_dir(self) -> str:
-        return self.train_uploads_dir
+        return self.labeled_gallery_dir
 
     @gallery_dataset_dir.setter
     def gallery_dataset_dir(self, value: str) -> None:
-        self.train_uploads_dir = value
+        self.labeled_gallery_dir = value
 
     @property
     def query_image_dir(self) -> str:
@@ -132,6 +133,7 @@ class PrototypeConfig:
         for raw in (
             self.paths.data_root,
             self.paths.train_uploads_dir,
+            self.paths.labeled_gallery_dir,
             self.paths.test_image_dir,
             self.paths.test_video_dir,
             self.paths.artifact_root,

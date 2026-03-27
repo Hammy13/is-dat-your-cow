@@ -405,4 +405,9 @@ class IdentityGallery:
                 except ValueError:
                     continue
         next_index = max(existing, default=0) + 1
-        return f"cow_{next_index:03d}"
+        prefix = "cow_"
+        for cow_id in self.entries:
+            if str(cow_id).startswith("COW_"):
+                prefix = "COW_"
+                break
+        return f"{prefix}{next_index:03d}"

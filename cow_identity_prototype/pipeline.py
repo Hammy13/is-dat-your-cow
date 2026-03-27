@@ -502,39 +502,11 @@ class CowIdentityPipeline:
         )
         return observation_metadata
 
-    def initialize_gallery(self, dataset_dir: str | Path | None = None, gallery_path: str | Path | None = None) -> Path:
-        dataset_dir = Path(dataset_dir or self.config.paths.gallery_dataset_dir)
-        gallery = IdentityGallery(self.config)
-        samples = list_gallery_samples(dataset_dir)
-        for sample in samples:
-            image = load_image_bgr(sample.image_path)
-            detection = self.detector.detect_best(image)
-            crop_bgr = image if detection is None else detection.crop_bgr
-            self._save_gallery_variants(
-                gallery,
-                cow_id=sample.cow_id,
-                crop_bgr=crop_bgr,
-                source_name=str(sample.image_path),
-                observation_stem=sample.image_path.stem,
-                notes_prefix="Labeled gallery initialization",
-            )
-        gallery_path = gallery.save(gallery_path)
-        metadata_path = Path(self.config.paths.artifact_root) / "gallery_initialization_summary.json"
-        metadata_path.write_text(
-            json.dumps(
-                {
-                    "gallery_path": str(gallery_path),
-                    "samples": len(samples),
-                    "cow_ids": sorted(gallery.entries.keys()),
-                },
-                indent=2,
-            ),
-            encoding="utf-8",
-        )
-        return gallery_path
-
-    def build_gallery_from_uploads(self, upload_dir: str | Path | None = None, gallery_path: str | Path | None = None) -> Path:
-        upload_dir = Path(upload_dir or self.config.paths.train_uploads_dir)
+    def _replace_gallery_with_staging(
+        self,
+        build_fn,
+        gallery_path: str | Path | None = None,
+    ) -> tuple[IdentityGallery, Path]:
         gallery_root = Path(self.config.paths.gallery_root)
         staging_root = gallery_root.parent / f"{gallery_root.name}__build_tmp"
         backup_root = gallery_root.parent / f"{gallery_root.name}__backup"
@@ -542,65 +514,23 @@ class CowIdentityPipeline:
             shutil.rmtree(staging_root, ignore_errors=True)
         if backup_root.exists():
             shutil.rmtree(backup_root, ignore_errors=True)
-        image_paths = list_images(upload_dir)
-        observations: list[dict[str, Any]] = []
-        for image_path in image_paths:
-            image = load_image_bgr(image_path)
-            detection = self.detector.detect_best(image)
-            crop_bgr = image if detection is None else detection.crop_bgr
-            vectors = self._extract_vectors(crop_bgr)
-            observations.append(
-                {
-                    "image_path": image_path,
-                    "crop_bgr": crop_bgr,
-                    "vectors": vectors,
-                }
-            )
+
         original_gallery_root = self.config.paths.gallery_root
         gallery = IdentityGallery(self.config)
+
+        def remap_gallery_paths(raw_value: Any) -> Any:
+            if isinstance(raw_value, dict):
+                return {key: remap_gallery_paths(value) for key, value in raw_value.items()}
+            if isinstance(raw_value, list):
+                return [remap_gallery_paths(item) for item in raw_value]
+            if isinstance(raw_value, str):
+                return raw_value.replace(str(staging_root), str(gallery_root))
+            return raw_value
+
         try:
             self.config.paths.gallery_root = str(staging_root)
             gallery = IdentityGallery(self.config)
-
-            if observations:
-                feature_matrix = np.stack([obs["vectors"]["hybrid_vector"] for obs in observations])
-                clustering = DBSCAN(
-                    eps=self.config.training.auto_cluster_eps,
-                    min_samples=self.config.training.auto_cluster_min_samples,
-                    metric="cosine",
-                )
-                labels = clustering.fit_predict(feature_matrix)
-
-                normalized_labels: list[int] = []
-                next_noise_label = max([label for label in labels if label >= 0], default=-1) + 1
-                for label in labels.tolist():
-                    if label == -1:
-                        normalized_labels.append(next_noise_label)
-                        next_noise_label += 1
-                    else:
-                        normalized_labels.append(label)
-
-                label_to_cow_id = {label: f"cow_{index:03d}" for index, label in enumerate(sorted(set(normalized_labels)), start=1)}
-                grouped_vectors: dict[int, list[np.ndarray]] = defaultdict(list)
-                for label, observation in zip(normalized_labels, observations):
-                    grouped_vectors[label].append(observation["vectors"]["hybrid_vector"])
-
-                for label, observation in zip(normalized_labels, observations):
-                    cow_id = label_to_cow_id[label]
-                    centroid = np.mean(np.stack(grouped_vectors[label]), axis=0)
-                    centroid /= max(np.linalg.norm(centroid), 1e-6)
-                    similarity = cosine_similarity(observation["vectors"]["hybrid_vector"], centroid)
-                    self._save_gallery_variants(
-                        gallery,
-                        cow_id=cow_id,
-                        crop_bgr=observation["crop_bgr"],
-                        source_name=str(observation["image_path"]),
-                        observation_stem=observation["image_path"].stem,
-                        notes_prefix="Auto-clustered from train_uploads",
-                        base_similarity_stats={"cluster_similarity": similarity},
-                    )
-            else:
-                label_to_cow_id = {}
+            build_fn(gallery)
 
             self.config.paths.gallery_root = original_gallery_root
             if backup_root.exists():
@@ -617,9 +547,13 @@ class CowIdentityPipeline:
             if backup_readme.exists() and not target_readme.exists():
                 shutil.copy2(backup_readme, target_readme)
 
-            gallery_path = gallery.save(gallery_path)
+            for entry in gallery.entries.values():
+                entry.metadata = remap_gallery_paths(entry.metadata)
+
+            resolved_gallery_path = gallery.save(gallery_path)
             if backup_root.exists():
                 shutil.rmtree(backup_root, ignore_errors=True)
+            return gallery, resolved_gallery_path
         except Exception:
             self.config.paths.gallery_root = original_gallery_root
             if backup_root.exists():
@@ -631,6 +565,100 @@ class CowIdentityPipeline:
             self.config.paths.gallery_root = original_gallery_root
             if staging_root.exists():
                 shutil.rmtree(staging_root, ignore_errors=True)
+
+    def initialize_gallery(self, dataset_dir: str | Path | None = None, gallery_path: str | Path | None = None) -> Path:
+        dataset_dir = Path(dataset_dir or self.config.paths.gallery_dataset_dir)
+        samples = list_gallery_samples(dataset_dir)
+
+        def build_labeled_gallery(gallery: IdentityGallery) -> None:
+            for sample in samples:
+                image = load_image_bgr(sample.image_path)
+                detection = self.detector.detect_best(image)
+                crop_bgr = image if detection is None else detection.crop_bgr
+                self._save_gallery_variants(
+                    gallery,
+                    cow_id=sample.cow_id,
+                    crop_bgr=crop_bgr,
+                    source_name=str(sample.image_path),
+                    observation_stem=sample.image_path.stem,
+                    notes_prefix="Labeled gallery initialization",
+                )
+
+        gallery, gallery_path = self._replace_gallery_with_staging(build_labeled_gallery, gallery_path)
+        metadata_path = Path(self.config.paths.artifact_root) / "gallery_initialization_summary.json"
+        metadata_path.write_text(
+            json.dumps(
+                {
+                    "dataset_dir": str(dataset_dir),
+                    "gallery_path": str(gallery_path),
+                    "samples": len(samples),
+                    "cow_ids": sorted(gallery.entries.keys()),
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+        return gallery_path
+
+    def build_gallery_from_uploads(self, upload_dir: str | Path | None = None, gallery_path: str | Path | None = None) -> Path:
+        upload_dir = Path(upload_dir or self.config.paths.train_uploads_dir)
+        image_paths = list_images(upload_dir)
+        observations: list[dict[str, Any]] = []
+        for image_path in image_paths:
+            image = load_image_bgr(image_path)
+            detection = self.detector.detect_best(image)
+            crop_bgr = image if detection is None else detection.crop_bgr
+            vectors = self._extract_vectors(crop_bgr)
+            observations.append(
+                {
+                    "image_path": image_path,
+                    "crop_bgr": crop_bgr,
+                    "vectors": vectors,
+                }
+            )
+
+        if observations:
+            feature_matrix = np.stack([obs["vectors"]["hybrid_vector"] for obs in observations])
+            clustering = DBSCAN(
+                eps=self.config.training.auto_cluster_eps,
+                min_samples=self.config.training.auto_cluster_min_samples,
+                metric="cosine",
+            )
+            labels = clustering.fit_predict(feature_matrix)
+
+            normalized_labels: list[int] = []
+            next_noise_label = max([label for label in labels if label >= 0], default=-1) + 1
+            for label in labels.tolist():
+                if label == -1:
+                    normalized_labels.append(next_noise_label)
+                    next_noise_label += 1
+                else:
+                    normalized_labels.append(label)
+        else:
+            normalized_labels = []
+
+        label_to_cow_id = {label: f"cow_{index:03d}" for index, label in enumerate(sorted(set(normalized_labels)), start=1)}
+        grouped_vectors: dict[int, list[np.ndarray]] = defaultdict(list)
+        for label, observation in zip(normalized_labels, observations):
+            grouped_vectors[label].append(observation["vectors"]["hybrid_vector"])
+
+        def build_clustered_gallery(gallery: IdentityGallery) -> None:
+            for label, observation in zip(normalized_labels, observations):
+                cow_id = label_to_cow_id[label]
+                centroid = np.mean(np.stack(grouped_vectors[label]), axis=0)
+                centroid /= max(np.linalg.norm(centroid), 1e-6)
+                similarity = cosine_similarity(observation["vectors"]["hybrid_vector"], centroid)
+                self._save_gallery_variants(
+                    gallery,
+                    cow_id=cow_id,
+                    crop_bgr=observation["crop_bgr"],
+                    source_name=str(observation["image_path"]),
+                    observation_stem=observation["image_path"].stem,
+                    notes_prefix="Auto-clustered from train_uploads",
+                    base_similarity_stats={"cluster_similarity": similarity},
+                )
+
+        gallery, gallery_path = self._replace_gallery_with_staging(build_clustered_gallery, gallery_path)
 
         summary_path = Path(self.config.paths.gallery_root) / "gallery_build_summary.json"
         summary_path.write_text(
@@ -937,9 +965,9 @@ class CowIdentityPipeline:
                     self.config,
                     image_path.name,
                     best_crop,
+                    vectors["mesh"],
                     gallery.get_gallery_images(decisions["hybrid"].cow_id),
                     decisions,
-                    self.config.mesh.grid_size,
                 )
                 records.append(
                     self._build_record(
@@ -992,9 +1020,9 @@ class CowIdentityPipeline:
                         self.config,
                         f"{image_path.stem}_{index}",
                         best_crop,
+                        vectors["mesh"],
                         gallery.get_gallery_images(decisions["hybrid"].cow_id),
                         decisions,
-                        self.config.mesh.grid_size,
                     )
                     records.append(
                         self._build_record(
@@ -1206,9 +1234,9 @@ class CowIdentityPipeline:
                             self.config,
                             f"{video_path.stem}_{frame_index}_{detection.track_id or 'det'}",
                             panel_crop,
+                            panel_vectors["mesh"],
                             gallery.get_gallery_images(decisions["hybrid"].cow_id),
                             decisions,
-                            self.config.mesh.grid_size,
                         )
                         records.append(
                             self._build_record(
@@ -1292,9 +1320,9 @@ class CowIdentityPipeline:
                         self.config,
                         f"{video_path.stem}_{frame_index}_fallback",
                         fallback_video_candidate["best_crop"],
+                        fallback_video_candidate["vectors"]["mesh"],
                         gallery.get_gallery_images(fallback_video_candidate["decisions"]["hybrid"].cow_id),
                         fallback_video_candidate["decisions"],
-                        self.config.mesh.grid_size,
                     )
                     records.append(
                         self._build_record(

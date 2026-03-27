@@ -15,6 +15,7 @@ cow_identity_prototype/
   configs/
   data/
     train_uploads/
+    labeled_gallery_train/
     test_uploads/
       images/
       videos/
@@ -53,6 +54,23 @@ This uses YOLO crops, mesh-grid descriptors, deep embeddings, and DBSCAN cluster
 ```bash
 .venv\Scripts\python.exe -m cow_identity_prototype.initialize_gallery --config cow_identity_prototype\configs\default_config.json
 ```
+
+Create your manual training folders here before running that command:
+
+```text
+cow_identity_prototype/data/labeled_gallery_train/COW_001/
+cow_identity_prototype/data/labeled_gallery_train/COW_002/
+```
+
+Each folder name is used directly as the gallery `Cow_ID`.
+
+You can also do this from the Streamlit UI:
+
+1. Open the `Build Gallery` tab.
+2. Enter a new folder name such as `COW_001`.
+3. Click `Create Cow Folder`.
+4. Upload one or more images into that folder with `Save Images To Cow Folder`.
+5. Click `Build Gallery From Manual Cow_ID Folders`.
 
 ### 3. Run image inference
 
