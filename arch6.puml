@@ -1,0 +1,62 @@
+@startuml
+'title DYHUAI Cow Identity Prototype\nArchitecture Flow for Detection, Fusion, and Identity Decision
+
+'skinparam backgroundColor #F7FAFC
+skinparam shadowing true
+skinparam defaultFontName Segoe UI
+skinparam defaultFontSize 15
+skinparam dpi 180
+skinparam ArrowColor #4A627A
+skinparam ArrowThickness 2
+skinparam PackageStyle rectangle
+skinparam rectangle {
+  RoundCorner 20
+  BorderColor #B9C8D6
+  BackgroundColor #FFFFFF
+  FontColor #243B53
+}
+skinparam database {
+  BorderColor #D5BE73
+  BackgroundColor #FFFDF6
+  FontColor #243B53
+}
+
+top to bottom direction
+
+package "1. Input and Detection" #EAF4FF {
+  rectangle "Training Images\nGallery enrollment data" as Training
+  rectangle "YOLO Detection\n+ tracking for video" as YOLO #EAF4FF
+  rectangle "Query Image / Video\nRecognition input stream" as Query
+}
+
+package "2. Feature Learning and Fusion" #ECFFF7 {
+  rectangle "Cow Crop Extraction\nRegion of interest per detected cow" as Crop #F4FBF7
+  rectangle "Mesh-Grid Descriptor\nSpatial structure and pattern cues" as Mesh #F9FFFC
+  rectangle "Deep Embedding\nResNet50 / ViT identity features" as Deep #F9FFFC
+  rectangle "Hybrid Feature Fusion\nCombine mesh-grid and deep embedding features" as Fusion #E7FFF6
+}
+
+package "3. Identity Retrieval and Output" #FFF8E6 {
+  database "Identity Gallery\nKnown cow representations" as Gallery
+  rectangle "Similarity Matching\nCompare fused vector with gallery profiles" as Match #FFFDF6
+  rectangle "Cow_ID Decision\nExisting cow / new cow" as Decision #FFFDF6
+  rectangle "Annotated Results\nReports + analytics" as Output #FFFFFF
+}
+
+"1. Input and Detection" -down[hidden]-"2. Feature Learning and Fusion"
+"2. Feature Learning and Fusion" -down[hidden]-"3. Identity Retrieval and Output"
+
+Training -down-> YOLO
+Query -down-> YOLO
+YOLO -down-> Crop
+Crop -down-> Mesh
+Crop -down-> Deep
+Mesh -down-> Fusion
+Deep -down-> Fusion
+Fusion -down-> Match
+Gallery -right-> Match
+Match -right-> Decision
+Decision -right-> Output
+Fusion ..> Gallery : build / update
+
+@enduml
